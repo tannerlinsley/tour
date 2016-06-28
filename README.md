@@ -3,7 +3,7 @@
 [![Join the chat at https://gitter.im/tourjs/tour](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/tourjs/tour?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 A simple, minimalist touring and on-boarding library for javascript
 
-## [Awesome Demo](http://tourjs.github.io/tour)
+<!-- ## [Awesome Demo](http://tourjs.github.io/tour) -->
 
 ## Features
 
