@@ -1,0 +1,230 @@
+vendor-prefixes = (webkit official)
+vendors = (webkit official)
+support-for-ie = false
+
+$buttonColor = #868686
+$successColor = #60bd68
+$dangerColor = #ec1d18
+$stepColor = rgba(0,0,0,0.7)
+$lengthColor = #CCC
+$darkColor = rgba(0,0,0,0.8)
+
+@import 'nib'
+
+nz-tour
+    *
+        box-sizing: border-box
+    &.hidden
+        #Tour-box
+            transform: scale(0)
+        .Tour-masks .mask
+            opacity:0
+    #Tour-box-wrap
+        position: fixed
+        width: auto
+        height: auto
+        left: 50%
+        top: 50%
+        transform: translate(-50%,-50%)
+        display: block
+        z-index: 999999999999
+    #Tour-box
+        width: 250px
+        min-height: 69px
+        max-height: 500px
+        padding: .5em
+        background: #fff
+        box-shadow: 0 6px 19px 2px rgba(0,0,0,0.14)
+        border-radius: 2px
+        transition:all .3s ease
+        transform: scale(1)
+        &.dark-box
+            background: $darkColor
+            color:white
+            #Tour-close
+                background: rgba(255, 255, 255, 0.81)
+                color: black
+                &:hover
+                    background:lighten($dangerColor, 10%)
+                    color:white
+            #Tour-step
+                background:white
+                color:$darkColor
+            #Tour-length
+                background: rgba(255,255,255,.2)
+                color: #BABABA
+            #Tour-tip
+                &.left
+                    left: 5px
+                &.center
+                    left: 50%
+                &.right
+                    right: 5px
+                &.side
+                    &.center
+                        top:50%
+                    &.top
+                        top: 5px
+                    &.bottom
+                        bottom: 5px
+                &.top
+                    top: -5px
+                    border-left: 5px solid transparent
+                    border-right: 5px solid transparent
+                    border-bottom: 5px solid $darkColor
+                &.bottom
+                    bottom: -5px
+                    border-left: 5px solid transparent
+                    border-right: 5px solid transparent
+                    border-top: 5px solid $darkColor
+                &.side
+                    &.left
+                        left: -10px
+                        border-top: 5px solid transparent
+                        border-bottom: 5px solid transparent
+                        border-right: 5px solid $darkColor
+                    &.right
+                        right: -10px
+                        border-top: 5px solid transparent
+                        border-bottom: 5px solid transparent
+                        border-left: 5px solid $darkColor
+    #Tour-tip
+        position: absolute
+        display: block
+        width: 0
+        height: 0
+        &.hidden
+            opacity:0
+        &.vertical
+            &.left
+                left: 5px
+            &.center
+                left: 50%
+            &.right
+                right: 5px
+            &.top
+                top: -5px
+                border-left: 5px solid transparent
+                border-right: 5px solid transparent
+                border-bottom: 5px solid white
+            &.bottom
+                bottom: -5px
+                border-left: 5px solid transparent
+                border-right: 5px solid transparent
+                border-top: 5px solid white
+        &.horizontal
+            &.top
+                top: 5px
+            &.center
+                top:50%
+            &.bottom
+                bottom: 5px
+            &.left
+                left: -5px
+                border-top: 5px solid transparent
+                border-bottom: 5px solid transparent
+                border-right: 5px solid white
+            &.right
+                right: -5px
+                border-top: 5px solid transparent
+                border-bottom: 5px solid transparent
+                border-left: 5px solid white
+    #Tour-close
+        position: absolute
+        top: -7px
+        right: -7px
+        width: 14px
+        height: 14px
+        background: rgba(0, 0, 0, 0.8)
+        border-radius: 100%
+        font-size: 8px
+        color: #fff
+        cursor: pointer
+        transition: all .2s ease
+        display: flex
+        align-items: center
+        justify-content: center
+        &:hover
+            background:$dangerColor
+    #Tour-content
+        width: 100%
+        height: 100%
+        max-height: 470px
+        overflow-x: hidden
+        overflow-y: auto
+        position:relative
+        border-bottom: solid 32px transparent
+        padding: 0 4px
+        font-size:14px
+    #Tour-step, #Tour-length
+        width: 24px
+        height: 24px
+        color: white
+        position: absolute
+        bottom: 0.7em
+        font-size: 12px
+        font-weight: bold
+        border-radius: 50px
+        display: flex
+        align-items: center
+        justify-content: center
+    #Tour-step
+        background: $stepColor
+        left: 0.7em
+        z-index: 1
+    #Tour-length
+        background: $lengthColor
+        left: 2.2em
+        z-index: 0
+    #Tour-actions
+        position absolute
+        bottom: .5em
+        right: .5em
+        height: 24px
+        button
+            height:100%
+            border:none
+            border-radius: 2px
+            font-size:.75em
+            padding: 4px 7px
+            color:white
+            background-color: $buttonColor
+            &:hover
+                background-color: darken($buttonColor, 20%)
+            ease(all, .2s)
+            &[disabled]
+                opacity:.2
+                &:hover
+                    opacity:.2
+            &:focus, &:focus:active
+                outline: none
+            &.success
+                background-color: $successColor
+                &:hover
+                    background-color: darken($successColor, 20%)
+            &.danger
+                background-color: $dangerColor
+                &:hover
+                    background-color: darken($dangerColor, 20%)
+    #Tour-previous
+            margin-right: .5em
+    .Tour-masks
+        .mask
+            position:fixed
+            z-index: 99999999
+            &.top, &.bottom
+                width:100%
+                height:0
+                left:0
+            &.left, &.right
+                width:0
+                height:100%
+                top:0
+            &.top
+                top:0
+            &.bottom
+                bottom:0
+            &.left
+                left:0
+            &.right
+                right:0
