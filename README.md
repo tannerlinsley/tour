@@ -2,6 +2,8 @@
 
 A simple, minimalist touring and on-boarding library for javascript
 
+[![](https://avatars0.githubusercontent.com/u/20192755?v=3&s=500)](http://tourjs.github.io/tour)
+
 [![Join the chat at https://gitter.im/tourjs/tour](https://badges.gitter.im/tourjs/tour.svg)](https://gitter.im/tourjs/tour?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 ## [Awesome Demo](http://tourjs.github.io/tour)
