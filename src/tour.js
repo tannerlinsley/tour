@@ -284,6 +284,8 @@ function cleanup(){
   // Hide the tour element
   els.tour.addClass('hidden')
 
+  els.canvas.css('opacity', null)
+
   els.masks_wrap.css('pointer-events', null)
 
   els.previous.off('click', previous)
@@ -936,6 +938,16 @@ function moveMasks() {
       })
     }
   }
+
+  if(!service.current.maskVisible){
+    els.canvas.css({
+      opacity: 0
+    })
+    return
+  }
+  els.canvas.css({
+    opacity: 1
+  })
 
   els.canvas[0].width = dims.window.width * els.pixelRatio
   els.canvas[0].height = dims.window.height * els.pixelRatio
