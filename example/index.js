@@ -1,67 +1,66 @@
 var myTour = window.myTour = {
-  config: {
-    //dark: true,
-  },
+  canExit: true,
   steps: [{
     target: '#features',
     content: "Let's take a look at some features!"
   }, {
     target: '#feature1',
-    content: "No matter the browser size, I'm always in the right spot."
+    content: "No matter the browser size, I'm always in the right spot. Try resizing!"
   }, {
     target: '#feature2',
-    content: "No more defining the position for every step! Try resizing your browser..."
-  }, {
-    target: '#start-demo',
-    content: "I even know when to step aside when your browser gets too short :)"
+    content: "By default, Tour puts your tooltips in the perfect spot, automagically!"
   }, {
     target: '#feature3',
-    content: "Promises are passed around and resolved like candy. Yes, that means asyncronous hooks for tour progression!"
+    content: "Promises are built in by default along with powerful before and after hooks for each step!"
   }, {
     target: '#feature4',
-    content: "Unlike intro.js, ng-joyride, and others, I WON'T relayer your DOM, shuffle your z-indexes or otherwise F up your perfectly architected UI."
+    content: "Unlike intro.js, ng-joyride, and others, Tour.js will NOT relayer your elements, shuffle your z-indices or manipulate your existing DOM in any way."
   }, {
     target: '#vader',
-    content: "Luke, come to the dark side...",
+    content: "Luke, come to the dark side... it's easily themable ;)",
     before: function() {
-      return new Promise((resolve, reject) => {
+      return new Promise(function(resolve, reject){
 
         var vaderEl = document.getElementById('vader')
-        vaderEl.styles.opacity = '1'
+        vaderEl.style.opacity = '1'
 
         var boxEl = document.getElementById('Tour-box')
-        boxEl.addClass('dark-box')
+        boxEl.className += ' ' + 'dark-box'
 
         resolve()
       })
     },
     after: function() {
-      return new Promise((resolve, reject) => {
+      return new Promise(function(resolve, reject){
 
         var vaderEl = document.getElementById('vader')
-        vaderEl.styles.opacity = '0'
+        vaderEl.style.opacity = '0'
 
         var boxEl = document.getElementById('Tour-box')
-        boxEl.removeClass('dark-box')
+        var classes = boxEl.className.split(' ')
+        classes = classes.filter(function(d){
+          return d !== 'dark-box'
+        })
+        boxEl.className = classes.join(' ')
 
         resolve()
       })
     }
   }, {
     target: '#installation',
-    content: "Installation is a breeze, and I'm only 4kb gzipped! (14kb non-zipped)"
+    content: "Installation is a breeze, and Tour.js is a lightweight (weighing in at about 12kb gzipped!)"
   }, {
     target: '#usage',
-    content: "Tours are simple JSON, as everything should be in life."
+    content: "Tours are ridiculously easy to build."
   }, {
     target: '#config',
-    content: "Customization is a snap! These are my defaults which you can override globally or per tour."
+    content: "And customization is a snap! These are the defaults which you can override globally, per tour, or per step."
   }, {
     target: '#api',
-    content: "Easy peezy."
+    content: "A clean and simple API to get the job done."
   }, {
     target: '#promises',
-    content: "Built in promises make angular awesome, and now your tours can be just as powerful!"
+    content: "Built in hooks let you fine-tune and control your app state as the tour progresses!"
   }, {
     target: '#forkme_banner',
     content: "I'll let you take it from here. <h4 style='text-align:right'><strong><3 <a href='http://github.com/tourjs'>tourjs</a></h4> "
@@ -69,5 +68,5 @@ var myTour = window.myTour = {
 }
 
 window.start = function(){
-  tour.start(myTour)
+  Tour.start(myTour)
 }
