@@ -4,7 +4,7 @@ A simple, minimalist touring and on-boarding library for javascript
 
 [![Join the chat at https://gitter.im/tourjs/tour](https://badges.gitter.im/tourjs/tour.svg)](https://gitter.im/tourjs/tour?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-<!-- ## [Awesome Demo](http://tourjs.github.io/tour) -->
+## [Awesome Demo](http://tourjs.github.io/tour)
 
 ## Features
 
@@ -16,13 +16,14 @@ A simple, minimalist touring and on-boarding library for javascript
 
 ## Installation
 
-Install via npm or CDN
+Install via npm
 ```bash
 $ npm install nz-tour --save
-# or
+```
+or CDN
+
 https://npmcdn.com/tour@latest/dist/tour.js
 https://npmcdn.com/tour@latest/dist/tour.css
-```
 
 Import JS and CSS
 ```javascript
