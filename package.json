@@ -2,7 +2,11 @@
   "name": "tour",
   "version": "2.0.0-beta1",
   "description": "A simple, minimalist touring and on-boarding library for javascript",
-  "main": "dist/tour.js",
+  "main": "src/tour.js",
+  "files": [
+    "src",
+    "tour.*"
+  ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch": "npm run build && npm run watch-css & npm run watch-js",
@@ -12,7 +16,9 @@
     "watch-js": "onchange src/tour.js -- browserify src/tour.js > dist/tour.js --debug --standalone Tour -t [ babelify --presets [ es2015 react ] ] -t uglifyify",
 
     "build-css": "stylus src/tour.styl --out dist/tour.css -c -u autoprefixer-stylus",
-    "build-js": "browserify src/tour.js > dist/tour.js --standalone Tour -t [ babelify --presets [ es2015 react ] ] -t uglifyify"
+    "build-js": "browserify src/tour.js > dist/tour.js --standalone Tour -t [ babelify --presets [ es2015 react ] ] -t uglifyify",
+
+    "prepublish": "npm run build"
   },
   "repository": {
     "type": "git",
