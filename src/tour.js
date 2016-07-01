@@ -571,7 +571,7 @@ function keyDown(e) {
       }
     case 38:
     case 40:
-      onWindowScrollDebounced()
+      onWindowScroll()
       return
   }
 }
