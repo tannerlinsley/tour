@@ -1,238 +1,263 @@
 <!DOCTYPE html>
-<html lang="en-us">
-  <head>
-    <meta charset="UTF-8">
-    <title>Tour by tourjs</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
-    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
-  </head>
-  <body>
-    <section class="page-header">
-      <h1 class="project-name">Tour</h1>
-      <h2 class="project-tagline">Touring and on-boarding for javascript applications</h2>
-      <a href="https://github.com/tourjs/tour" class="btn">View on GitHub</a>
-      <a href="https://github.com/tourjs/tour/zipball/master" class="btn">Download .zip</a>
-      <a href="https://github.com/tourjs/tour/tarball/master" class="btn">Download .tar.gz</a>
-    </section>
+<html>
 
-    <section class="main-content">
-      <h1>
-<a id="tour" class="anchor" href="#tour" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Tour</h1>
+<head>
+  <meta charset='utf-8'>
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Tour : Easy touring and on-boarding for front-end applications. ">
 
-<p><a href="https://gitter.im/tourjs/tour?utm_source=badge&amp;utm_medium=badge&amp;utm_campaign=pr-badge&amp;utm_content=badge"><img src="https://badges.gitter.im/Join%20Chat.svg" alt="Join the chat at https://gitter.im/tourjs/tour"></a>
-A simple, minimalist touring and on-boarding library for javascript</p>
+  <link rel="stylesheet" type="text/css" media="screen" href="https://npmcdn.com/tour@latest/dist/tour.css"/>
+  <!-- <link rel="stylesheet" type="text/css" media="screen" href="../dist/tour.css"/> -->
+  <link rel="stylesheet" type="text/css" media="screen" href="https://npmcdn.com/tour@latest/example/index.css"/>
+  <!-- <link rel="stylesheet" type="text/css" media="screen" href="index.css"/> -->
 
+  <title>Tour</title>
+</head>
 
+<body ng-app="demo" ng-controller="mainController">
 
-<h2>
-<a id="features" class="anchor" href="#features" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Features</h2>
+ <!-- HEADER -->
+ <div id="header_wrap" class="outer">
+  <header class="inner">
+   <a id="forkme_banner" href="https://github.com/tourjs/Tour">View on GitHub</a>
 
-<ul>
-<li>Supports single page apps, and complex scrollable content</li>
-<li>  Responsive &amp; Intelligent</li>
-<li>  Automagic Positioning</li>
-<li>  Promise Driven Events &amp; Hooks</li>
-<li>  Tour does not manipulate or relayer your DOM elements in any way</li>
-</ul>
+   <h1 id="project_title">Tour</h1>
+   <h2 id="project_tagline">Touring and on-boarding made simple for AngularJS. </h2>
+  </header>
+ </div>
 
-<h2>
-<a id="installation" class="anchor" href="#installation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Installation</h2>
+ <!-- MAIN CONTENT -->
+ <div id="main_content_wrap" class="outer">
+  <section id="main_content" class="inner">
+   <button id="start-demo" onClick="window.start()">Start Demo</button>
+   <article class="markdown-body entry-content">
 
-<pre><code>$ npm install nz-tour --save
-</code></pre>
+    <h2 id="features">
+     <a id="user-content-features" class="anchor" href="#features" aria-hidden="true"><span class="octicon octicon-link"></span></a>Features</h2>
 
-<div class="highlight highlight-source-js"><pre><span class="pl-k">import</span> <span class="pl-smi">Tour</span> <span class="pl-k">from</span> <span class="pl-s"><span class="pl-pds">'</span>tour<span class="pl-pds">'</span></span></pre></div>
+    <ul class="task-list">
+     <li id="feature1"> Responsive &amp; Intelligent</li>
+     <li id="feature2"> Automagic Positioning</li>
+     <li id="feature3"> Promise Driven Events &amp; Hooks (Because we &lt;3 Angular)</li>
+     <li id="feature4"> Tour doesn't duplicate, manipulate, or stack your DOM elements</li>
+    </ul>
 
-<h2>
-<a id="simple-usage" class="anchor" href="#simple-usage" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Simple Usage</h2>
+    <div id="installation">
+     <h2>
+      <a id="user-content-installation--usage" class="anchor" href="#installation--usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installation &amp; Usage</h2>
 
-<div class="highlight highlight-source-js"><pre><span class="pl-k">const</span> <span class="pl-c1">myTour</span> <span class="pl-k">=</span> {
-    config<span class="pl-k">:</span> {} <span class="pl-c">// see config</span>
-    steps<span class="pl-k">:</span> [{
-      target<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>#first-element<span class="pl-pds">'</span></span>,
-      content<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>This is the first step!<span class="pl-pds">'</span></span>,
-    }, {
-      target<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>.some .other .element<span class="pl-pds">'</span></span>,
-      content<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>Blah blah blah. I prefer to show up on the right.<span class="pl-pds">'</span></span>,
-            placement<span class="pl-k">:</span> [ <span class="pl-s"><span class="pl-pds">'</span>right<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>top<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>bottom<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>left<span class="pl-pds">'</span></span> ],
-    }, {
-      target<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>#menu-element<span class="pl-pds">'</span></span>,
-      content<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>I guess this is a menu!<span class="pl-pds">'</span></span>,
-    }, {
-      target<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>#last-element<span class="pl-pds">'</span></span>,
-      content<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>It is over! :(<span class="pl-pds">'</span></span>,
-    }]
+     <ol class="task-list">
+      <li> <code>$ bower/npm install tour --save</code>
+      </li>
+      <li> Include jQuery (before Angular)</li>
+      <li> Include <code>dist/tour.min.js</code> and <code>dist/tour.min.css</code> files.</li>
+      <li> Add <code>Tour</code> as a dependency in your app.</li>
+      <li> Inject the <code>Tour</code> service anywhere in your app.</li>
+     </ol>
+    </div>
+
+    <div id="usage">
+     <h2>
+      <a id="user-content-simple-usage" class="anchor" href="#simple-usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Simple Usage</h2>
+
+     <div class="highlight highlight-javascript"><pre><span class="pl-s">var</span> tour <span class="pl-k">=</span> {
+ config<span class="pl-k">:</span> {} <span class="pl-c">// see config</span>
+ steps<span class="pl-k">:</span> [{
+  target<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">'</span>#first-element<span class="pl-pds">'</span></span>,
+  content<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">'</span>This is the first step!<span class="pl-pds">'</span></span>,
+ }, {
+  target<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">'</span>.some .other .element<span class="pl-pds">'</span></span>,
+  content<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">'</span>Blah blah blah.<span class="pl-pds">'</span></span>,
+ }, {
+  target<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">'</span>#menu-element<span class="pl-pds">'</span></span>,
+  content<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">'</span>I guess this is a menu!<span class="pl-pds">'</span></span>,
+ }, {
+  target<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">'</span>#last-element<span class="pl-pds">'</span></span>,
+  content<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">'</span>It is over! :(<span class="pl-pds">'</span></span>,
+ }]
 };
 
-<span class="pl-smi">Tour</span>.<span class="pl-c1">start</span>(myTour)
-  .<span class="pl-en">then</span>(() <span class="pl-k">=&gt;</span> {
-    <span class="pl-en">console</span>.<span class="pl-c1">log</span>(<span class="pl-s"><span class="pl-pds">'</span>Tour Finished!<span class="pl-pds">'</span></span>);
-  })
-  .<span class="pl-en">catch</span>(() <span class="pl-k">=&gt;</span> {
-    <span class="pl-en">console</span>.<span class="pl-c1">log</span>(<span class="pl-s"><span class="pl-pds">'</span>Tour Interrupted!<span class="pl-pds">'</span></span>)
-  });
-</pre></div>
+Tour.<span class="pl-sc">start</span>(service.tours[tour])
+ .then(<span class="pl-st">function</span>() {
+  <span class="pl-en">console</span><span class="pl-s3">.log</span>(<span class="pl-s1"><span class="pl-pds">'</span>Tour Finished!<span class="pl-pds">'</span></span>);
+ })
+ .catch(<span class="pl-st">function</span>() {
+  <span class="pl-en">console</span><span class="pl-s3">.log</span>(<span class="pl-s1"><span class="pl-pds">'</span>Tour Aborted!<span class="pl-pds">'</span></span>)
+ });
+</pre>
+     </div>
+    </div>
+    <div id="config">
+     <h2>
+      <a id="user-content-config" class="anchor" href="#config" aria-hidden="true"><span class="octicon octicon-link"></span></a>Config</h2>
 
-<h2>
-<a id="config" class="anchor" href="#config" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Config</h2>
+     <p>Defaults:</p>
 
-<p>Defaults:</p>
-
-<div class="highlight highlight-source-js"><pre>{
-    canExit<span class="pl-k">:</span> <span class="pl-c1">false</span>, <span class="pl-c">// Can exit the tour or not (via an X button)</span>
-    padding<span class="pl-k">:</span> <span class="pl-c1">5</span>, <span class="pl-c">// Padding around the highlighted element</span>
-    maxHeight<span class="pl-k">:</span> <span class="pl-c1">120</span>, <span class="pl-c">// Max height of the tooltip box</span>
-    maxWidth<span class="pl-k">:</span> <span class="pl-c1">250</span>, <span class="pl-c">// Max width of the tooltip box</span>
-  maskVisible<span class="pl-k">:</span> <span class="pl-c1">true</span>, <span class="pl-c">// Shows the mask</span>
-  maskVisibleOnNoTarget<span class="pl-k">:</span> <span class="pl-c1">false</span>, <span class="pl-c">// Shows a full page mask if no target element has been specified</span>
-  maskClickThrough<span class="pl-k">:</span> <span class="pl-c1">false</span>, <span class="pl-c">// Allows the user to interact with elements beneath the mask</span>
-  maskScrollThrough<span class="pl-k">:</span> <span class="pl-c1">true</span> <span class="pl-c">// Allows the user to scroll the scrollbox or window through the mask</span>
-  maskColor<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>rgba(0,0,0,.7)<span class="pl-pds">'</span></span> <span class="pl-c">// The mask color</span>
-  scrollBox<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>body<span class="pl-pds">'</span></span>, <span class="pl-c">// The container to scroll when searching for elements</span>
-  previousText<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>Previous<span class="pl-pds">'</span></span>,
-  nextText<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>Next<span class="pl-pds">'</span></span>,
-  finishText<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>Finish<span class="pl-pds">'</span></span>,
-  showPrevious<span class="pl-k">:</span> <span class="pl-c1">true</span>, <span class="pl-c">// Setting to false hides the previous button</span>
-  showNext<span class="pl-k">:</span> <span class="pl-c1">true</span> <span class="pl-c">// Setting to false hides the next button</span>
+     <div class="highlight highlight-javascript"><pre><span class="pl-s">var</span> tour <span class="pl-k">=</span> {
+ config<span class="pl-k">:</span> {
+  mask<span class="pl-k">:</span> {
+   visible<span class="pl-k">:</span> <span class="pl-c1">true</span>, <span class="pl-c">// Shows the element mask</span>
+   clickThrough<span class="pl-k">:</span> <span class="pl-c1">false</span>, <span class="pl-c">// Allows the user to interact with elements beneath the mask</span>
+   clickExit<span class="pl-k">:</span> <span class="pl-c1">false</span>, <span class="pl-c">// Exit the tour when the user clicks on the mask</span>
+   scrollThrough<span class="pl-k">:</span> <span class="pl-c1">true</span>, <span class="pl-c">// Allows the user to scroll while hovered over the mask</span>
+   color<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">'</span>rgba(0,0,0,.7)<span class="pl-pds">'</span></span> <span class="pl-c">// The mask color</span>
+  },
+  container<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">'</span>body<span class="pl-pds">'</span></span>, <span class="pl-c">// The container to mask</span>
+  scrollBox<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">'</span>body<span class="pl-pds">'</span></span>, <span class="pl-c">// The container to scroll when searching for elements</span>
+  previousText<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">'</span>Previous<span class="pl-pds">'</span></span>,
+  nextText<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">'</span>Next<span class="pl-pds">'</span></span>,
+  finishText<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">'</span>Finish<span class="pl-pds">'</span></span>,
   animationDuration<span class="pl-k">:</span> <span class="pl-c1">400</span>, <span class="pl-c">// Animation Duration for the box and mask</span>
-  placement<span class="pl-k">:</span> [<span class="pl-s"><span class="pl-pds">'</span>bottom<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>right<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>top<span class="pl-pds">'</span></span>,<span class="pl-s"><span class="pl-pds">'</span>left<span class="pl-pds">'</span></span>],
-  dark<span class="pl-k">:</span> <span class="pl-c1">false</span>, <span class="pl-c">// Dark mode (Works great with `mask.visible = false`)</span>
-  disableInteraction<span class="pl-k">:</span> <span class="pl-c1">false</span>, <span class="pl-c">// Disable interaction with the highlighted elements</span>
-  disableEscExit<span class="pl-k">:</span> <span class="pl-c1">false</span> <span class="pl-c">// Disable end of tour when pressing ESC,</span>
-}</pre></div>
+  dark<span class="pl-k">:</span> <span class="pl-c1">false</span> <span class="pl-c">// Dark mode (Works great with `mask.visible = false`)</span>
+ },
+ steps<span class="pl-k">:</span> []
+}</pre>
+     </div>
+    </div>
 
-<h2>
-<a id="api" class="anchor" href="#api" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>API</h2>
+    <div id="api">
+     <h2>
+      <a id="user-content-api" class="anchor" href="#api" aria-hidden="true"><span class="octicon octicon-link"></span></a>API</h2>
 
-<h4>
-<a id="starttour" class="anchor" href="#starttour" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>.start(tour)</h4>
+     <h4>
+      <a id="user-content-starttour---starts-a-tour" class="anchor" href="#starttour---starts-a-tour" aria-hidden="true"><span class="octicon octicon-link"></span></a>.start(tour) - Starts a Tour</h4>
 
-<ul>
-<li>Starts a Tour</li>
-<li>Params:
+     <p>Params:</p>
 
-<ul>
-<li>
-<em>tour</em>: Tour Object</li>
-</ul>
-</li>
-<li>Returns:
+     <ul class="task-list">
+      <li> <em>tour</em>: Tour Object</li>
+     </ul>
 
-<ul>
-<li>Promise that resolves when the tour is finished or rejected when aborted.</li>
-</ul>
-</li>
-</ul>
+     <p>Returns:</p>
 
-<h4>
-<a id="stop" class="anchor" href="#stop" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>.stop()</h4>
+     <ul class="task-list">
+      <li> Promise that resolves when the tour is finished and rejected when aborted.</li>
+     </ul>
 
-<ul>
-<li>Stops a Tour</li>
-<li>Returns:
+     <h4>
+      <a id="user-content-stop---stops-a-tour" class="anchor" href="#stop---stops-a-tour" aria-hidden="true"><span class="octicon octicon-link"></span></a>.stop() - Stops a Tour</h4>
 
-<ul>
-<li>Promise that resolves when the tour is stopped.</li>
-</ul>
-</li>
-</ul>
+     <p>Returns:</p>
 
-<h4>
-<a id="next" class="anchor" href="#next" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>.next()</h4>
+     <ul class="task-list">
+      <li> Promise that resolves when the tour is stopped.</li>
+     </ul>
 
-<ul>
-<li>Goes to the next step in the current tour</li>
-<li>Returns:
+     <h4>
+      <a id="user-content-pause---pauses-a-tour" class="anchor" href="#pause---pauses-a-tour" aria-hidden="true"><span class="octicon octicon-link"></span></a>.pause() - Pauses a Tour</h4>
 
-<ul>
-<li>Promise that resolves when the next step is reached</li>
-</ul>
-</li>
-</ul>
+     <p>Returns:</p>
 
-<h4>
-<a id="previous" class="anchor" href="#previous" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>.previous()</h4>
+     <ul class="task-list">
+      <li> Promise that resolves when the tour is paused and hidden.</li>
+     </ul>
 
-<ul>
-<li>Goes to the previous step in the current tour
+     <h4>
+      <a id="user-content-next---goes-to-the-next-step-in-the-current-tour" class="anchor" href="#next---goes-to-the-next-step-in-the-current-tour" aria-hidden="true"><span class="octicon octicon-link"></span></a>.next() - Goes to the next step in the current tour</h4>
 
-<ul>
-<li>Promise that resolves when the previous step is reached</li>
-</ul>
-</li>
-</ul>
+     <p>Returns:</p>
 
-<h4>
-<a id="gotoindex" class="anchor" href="#gotoindex" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>.goto(index)</h4>
+     <ul class="task-list">
+      <li> Promise that resolves when the next step is reached</li>
+     </ul>
 
-<ul>
-<li>Goes to a specific step in the tour</li>
-<li>
-<p>Params:</p>
+     <h4>
+      <a id="user-content-previous---goes-to-the-previous-step-in-the-current-tour" class="anchor" href="#previous---goes-to-the-previous-step-in-the-current-tour" aria-hidden="true"><span class="octicon octicon-link"></span></a>.previous() - Goes to the previous step in the current tour</h4>
 
-<ul>
-<li>
-<em>index</em>: The 0-index number of the step eg. <code>0, 1, 2, 3</code>
-</li>
-</ul>
-</li>
-<li>
-<p>Returns:</p>
+     <ul class="task-list">
+      <li> Promise that resolves when the previous step is reached</li>
+     </ul>
 
-<ul>
-<li>Promise that resolves when the specific step is reached</li>
-</ul>
-</li>
-</ul>
+     <h4>
+      <a id="user-content-gotostepstep---goes-to-a-specific-step-in-the-tour" class="anchor" href="#gotostepstep---goes-to-a-specific-step-in-the-tour" aria-hidden="true"><span class="octicon octicon-link"></span></a>.gotoStep(step): - Goes to a specific step in the tour</h4>
 
-<h2>
-<a id="using-promise-event-hooks" class="anchor" href="#using-promise-event-hooks" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Using Promise Event Hooks</h2>
+     <p>Params:</p>
 
-<p>You can pass any function that returns a promise to the <code>before</code> and <code>after</code> properties for any step.  When the promise resolves, the tour moves on accordingly.</p>
+     <ul class="task-list">
+      <li> <em>step</em>: The number of the step starting at 1,2,3...</li>
+     </ul>
 
-<h4>
-<a id="example" class="anchor" href="#example" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Example</h4>
+     <p>Returns:</p>
 
-<div class="highlight highlight-source-js"><pre><span class="pl-k">var</span> tour <span class="pl-k">=</span> {
-    steps<span class="pl-k">:</span> [{
-      target<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>#first-element<span class="pl-pds">'</span></span>,
-      content<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>This is the first step!<span class="pl-pds">'</span></span>,
-    }, {
-      target<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>.some .other .element<span class="pl-pds">'</span></span>,
-      content<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>Blah blah blah.<span class="pl-pds">'</span></span>,
-      <span class="pl-en">before</span><span class="pl-k">:</span> () <span class="pl-k">=&gt;</span> {
-        <span class="pl-c">// Do something amazing</span>
-        <span class="pl-k">return</span> <span class="pl-k">new</span> <span class="pl-en">Promise</span>()
-        }
-    }, {
-      target<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>#menu-element<span class="pl-pds">'</span></span>,
-      content<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>I guess this is a menu!<span class="pl-pds">'</span></span>,
-      <span class="pl-en">after</span><span class="pl-k">:</span> () <span class="pl-k">=&gt;</span> {
-        <span class="pl-c">// Do some more cool stuff</span>
-        <span class="pl-k">return</span> <span class="pl-k">new</span> <span class="pl-en">Promise</span>()
-        }
-    }, {
-      target<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>#last-element<span class="pl-pds">'</span></span>,
-      content<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>It is over! :(<span class="pl-pds">'</span></span>,
-    }]
-}</pre></div>
+     <ul class="task-list">
+      <li> Promise that resolves when the specific step is reached</li>
+     </ul>
+    </div>
 
-<h2>
-<a id="roadmap--contributing" class="anchor" href="#roadmap--contributing" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Roadmap &amp; Contributing</h2>
+    <div id="promises">
+     <h2>
+      <a id="user-content-promising-event-hooks" class="anchor" href="#promising-event-hooks" aria-hidden="true"><span class="octicon octicon-link"></span></a>Promising Event Hooks</h2>
 
-<p>All PR's and contributions are more than welcome!</p>
+     <ul class="task-list">
+      <li> Before - function that returns a promise</li>
+      <li> After - function that returns a promise</li>
+     </ul>
 
-      <footer class="site-footer">
-        <span class="site-footer-owner"><a href="https://github.com/tourjs/tour">Tour</a> is maintained by <a href="https://github.com/tourjs">tourjs</a>.</span>
+     <h4>
+      <a id="user-content-example" class="anchor" href="#example" aria-hidden="true"><span class="octicon octicon-link"></span></a>Example</h4>
 
-        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
-      </footer>
+     <div class="highlight highlight-javascript">
+      <pre><span class="pl-s">var</span> tour <span class="pl-k">=</span> {
+ steps<span class="pl-k">:</span> [{
+  target<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">'</span>#first-element<span class="pl-pds">'</span></span>,
+  content<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">'</span>This is the first step!<span class="pl-pds">'</span></span>,
+ }, {
+  target<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">'</span>.some .other .element<span class="pl-pds">'</span></span>,
+  content<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">'</span>Blah blah blah.<span class="pl-pds">'</span></span>,
+  <span class="pl-en">before</span>: <span class="pl-st">function</span>(){
+   <span class="pl-s">var</span> d <span class="pl-k">=</span> $q.<span class="pl-sc">defer</span>();
+   <span class="pl-c">// Do something amazing</span>
+   d.resolve(); <span class="pl-c">// or d.reject()</span>
+   <span class="pl-k">return</span> d.promise
+  }
+ }, {
+  target<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">'</span>#menu-element<span class="pl-pds">'</span></span>,
+  content<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">'</span>I guess this is a menu!<span class="pl-pds">'</span></span>,
+  <span class="pl-en">after</span>: <span class="pl-st">function</span>(){
+   <span class="pl-s">var</span> d <span class="pl-k">=</span> $q.<span class="pl-sc">defer</span>();
+   <span class="pl-c">// Do some more cool stuff</span>
+   d.resolve(); <span class="pl-c">// or d.reject()</span>
+   <span class="pl-k">return</span> d.promise
+  }
+ }, {
+  target<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">'</span>#last-element<span class="pl-pds">'</span></span>,
+  content<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">'</span>It is over! :(<span class="pl-pds">'</span></span>,
+ }]
+}</pre>
+     </div>
+    </div>
 
-    </section>
+    <h2>
+     <a id="user-content-roadmap--contributing" class="anchor" href="#roadmap--contributing" aria-hidden="true"><span class="octicon octicon-link"></span></a>Roadmap &amp; Contributing</h2>
 
-  
-  </body>
+    <ol class="task-list">
+     <li>Remove dependency on jQuery</li>
+     <li>Use angular $animate for animations and class changes</li>
+     <li>Add more hooks and config for customization</li>
+    </ol>
+
+    <p>All PR's and contributions are more than welcome!</p>
+   </article>
+  </section>
+ </div>
+
+ <!-- FOOTER  -->
+ <div id="footer_wrap" class="outer">
+  <footer class="inner">
+   <p class="copyright">
+    Tour is maintained by <a href="https://github.com/tourjs">tourjs</a>
+   </p>
+  </footer>
+ </div>
+
+ <img id="vader" src="images/vader.jpg">
+
+ <script type="text/javascript" src="https://npmcdn.com/tour@latest/dist/tour.js"></script>
+ <!-- <script type="text/javascript" src="../dist/tour.js"></script> -->
+ <script type="text/javascript" src="https://npmcdn.com/tour@latest/example/index.js"></script>
+ <!-- <script type="text/javascript" src="index.js"></script> -->
+
+</body>
+
 </html>
