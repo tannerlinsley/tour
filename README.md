@@ -1,7 +1,8 @@
 # Tour
 
-[![Join the chat at https://gitter.im/tourjs/tour](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/tourjs/tour?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 A simple, minimalist touring and on-boarding library for javascript
+
+[![Join the chat at https://gitter.im/tourjs/tour](https://badges.gitter.im/tourjs/tour.svg)](https://gitter.im/tourjs/tour?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 <!-- ## [Awesome Demo](http://tourjs.github.io/tour) -->
 
@@ -15,33 +16,44 @@ A simple, minimalist touring and on-boarding library for javascript
 
 ## Installation
 
-```
+Install via npm or CDN
+```bash
 $ npm install nz-tour --save
+# or
+https://npmcdn.com/tour@latest/dist/tour.js
+https://npmcdn.com/tour@latest/dist/tour.css
 ```
 
+Import JS and CSS
 ```javascript
 import Tour from 'tour'
 ```
+```css
+@import 'node_modules/tour/dist/tour.css'
+```
+
+
 
 ## Simple Usage
 
 ```javascript
 const myTour = {
-	config: {} // see config
-    steps: [{
-      target: '#first-element',
-      content: 'This is the first step!',
-    }, {
-      target: '.some .other .element',
-      content: 'Blah blah blah. I prefer to show up on the right.',
-			placement: [ 'right', 'top', 'bottom', 'left' ],
-    }, {
-      target: '#menu-element',
-      content: 'I guess this is a menu!',
-    }, {
-      target: '#last-element',
-      content: 'It is over! :(',
-    }]
+	canExit: true,
+	nextText: 'Proceed!',
+  steps: [{
+	  target: '#first-element',
+	  content: 'This is the first step!',
+	}, {
+	  target: '.some .other .element',
+	  content: 'Blah blah blah. I prefer to show up on the right.',
+		placement: [ 'right', 'top', 'bottom', 'left' ],
+	}, {
+	  target: '#menu-element',
+	  content: 'I guess this is a menu!',
+	}, {
+	  target: '#last-element',
+	  content: 'It is over! :(',
+	}],
 };
 
 Tour.start(myTour)

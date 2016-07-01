@@ -1,9 +1,10 @@
 {
   "name": "tour",
-  "version": "2.0.0-beta3",
+  "version": "2.0.0-beta4",
   "description": "A simple, minimalist touring and on-boarding library for javascript",
   "main": "src/tour.js",
   "files": [
+    "example",
     "dist",
     "src",
     "tour.*"
