@@ -20,7 +20,7 @@ A simple, minimalist touring and on-boarding library for javascript
 
 Install via npm
 ```bash
-$ npm install nz-tour --save
+$ npm install tour --save
 ```
 or CDN
 
