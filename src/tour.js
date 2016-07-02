@@ -298,7 +298,7 @@ function cleanup(){
   eventUtils.removeWheelListener(window, eventUtils.onWindowScrollDebounced)
   els.content.off('scroll', onBoxScroll)
   eventUtils.removeWheelListener(els.content[0], onBoxScroll)
-  if (config.maskScrollThrough === false) {
+  if (service.current.maskScrollThrough === false) {
     eventUtils.removeWheelListener(els.masks_wrap[0], stopMaskScroll)
   }
 }
