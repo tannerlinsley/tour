@@ -1,3 +1,5 @@
+var Tour = window.Tour.default
+
 var myTour = window.myTour = {
   canExit: true,
   steps: [{

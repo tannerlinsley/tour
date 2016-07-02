@@ -34,6 +34,9 @@ import Tour from 'tour'
 
 // CommonJS
 const Tour = require('tour').default
+
+// Vanilla
+var Tour = window.Tour.default
 ```
 ```css
 @import 'node_modules/tour/dist/tour.css'
