@@ -31,6 +31,7 @@ Import JS and CSS
 ```javascript
 // ES6+
 import Tour from 'tour'
+
 // CommonJS
 const Tour = require('tour').default
 ```
