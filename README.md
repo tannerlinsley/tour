@@ -29,7 +29,10 @@ https://npmcdn.com/tour@latest/dist/tour.css
 
 Import JS and CSS
 ```javascript
+// ES6+
 import Tour from 'tour'
+// CommonJS
+const Tour = require('tour').default
 ```
 ```css
 @import 'node_modules/tour/dist/tour.css'

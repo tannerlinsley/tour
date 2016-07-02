@@ -56,17 +56,9 @@ const service = {
   goto,
 }
 
+let initialized
 
-init()
-
-module.exports = service
-
-function init(){
-  document.addEventListener("DOMContentLoaded", () => {
-    injectTemplate()
-    resolveEventSystem()
-  })
-}
+export default service
 
 // ########################################################################
 // API & State
@@ -76,6 +68,11 @@ function init(){
 
 
 function start(tour){
+
+  if(!initialized){
+    init()
+    initialized = true
+  }
 
   if (!tour) {
     return Promise.reject('No Tour Specified!')
@@ -176,6 +173,10 @@ function goto(i) {
 // Internals
 // ########################################################################
 
+function init(){
+  injectTemplate()
+  resolveEventSystem()
+}
 
 function prepView(){
 
