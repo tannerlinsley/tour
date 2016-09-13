@@ -24,8 +24,8 @@ $ npm install tour --save
 ```
 or CDN
 
-https://npmcdn.com/tour@latest/dist/tour.js
-https://npmcdn.com/tour@latest/dist/tour.css
+https://unpkg.com/tour@latest/dist/tour.js
+https://unpkg.com/tour@latest/dist/tour.css
 
 Import JS and CSS
 ```javascript
