@@ -1,5 +1,6 @@
 import $ from 'cash-dom'
 import TA from 'TinyAnimate'
+import './tour.styl'
 
 const defaults = {
   maskVisible: true,
