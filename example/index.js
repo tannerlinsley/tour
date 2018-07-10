@@ -1,7 +1,6 @@
 import Tour from '../src/tour.js'
 
 var myTour = window.myTour = {
-  dark:true,
   canExit: true,
   steps: [{
     target: '#features',
