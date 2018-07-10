@@ -739,10 +739,6 @@ function moveMasksToTarget(target) {
 
   const padding = service.current.padding || 0
 
-  let targetRect = target.getBoundingClientRect();
-  let bodyRect = document.body.getBoundingClientRect();
-  console.log({target, bodyRect})
-
   if (!els.target) {
     els.masks_top.css({
       height: service.current.maskVisibleOnNoTarget ? '100%' : '0px'
@@ -767,11 +763,17 @@ function moveMasksToTarget(target) {
       top: dims.target.offset.top < 0 ? dims.target.offset.top + 'px' : 0
     })
 
-    let amtToBottom = bodyRect.height - bodyRect.y
+
+    let targetRect = target.getBoundingClientRect();
+    let bodyRect = document.body.getBoundingClientRect();
+
+    let topOffset = targetRect.top + targetRect.height - bodyRect.y;
+    let height = bodyRect.height - topOffset;
+
     // let amtFromTargetToBottom = bodyRect.height
     els.masks_bottom.css({
-      height: dims.target.offset.fromBottom + 'px',
-      top: dims.target.offset.fromBottom < 0 ? dims.target.offset.fromBottom + amtToBottom + 'px' : 0,
+      height: height + 'px',
+      top: topOffset + 'px',
       bottom: 'initial'
     })
     els.masks_left.css({
@@ -827,8 +829,6 @@ function moveMasksToTarget(target) {
   const bottom = dims.target.offset.toBottom + padding
 
   return new Promise((resolve, reject) => {
-    console.log('here')
-
     TA.animate(0, 1, service.current.animationDuration, (d) => {
      //   els.ctx.clearRect(0, 0, dims.window.width, dims.window.height)
 
