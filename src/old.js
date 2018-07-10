@@ -1,6 +1,5 @@
 import $ from 'cash-dom'
 import TA from 'TinyAnimate'
-import './tour.styl'
 
 const defaults = {
   maskVisible: true,
@@ -39,6 +38,11 @@ const errors = {
     error: 'interrupted',
     message: `The tour was interrupted`
   }
+}
+
+// Some utilities for events that we'll resolve in a bit
+const eventUtils = {
+  onWindowScrollDebounced: throttle(onWindowScroll, 16),
 }
 
 // The exported API
@@ -83,7 +87,6 @@ function start(tour){
     return start(tour)
   }
 
-  //todo: fix this stupidity... replac with Promise.resolve(promise) and Promise.reject(promise)
   let d, resolve, reject
   d = new Promise((res, rej) => {
     resolve = res
@@ -172,11 +175,12 @@ function goto(i) {
 
 function init(){
   injectTemplate()
+  resolveEventSystem()
 }
 
 function prepView(){
 
-  const {current} = service
+  const current = service.current
 
   // Check for valid placement default
   if (!validPriorities(service.current.placement)) {
@@ -236,10 +240,19 @@ function prepView(){
     els.close.on('click', clickStop)
 
     els.window.on('keydown', keyDown)
+    els.window.on('resize', eventUtils.onWindowScrollDebounced)
+    els.window.on('scroll', eventUtils.onWindowScrollDebounced)
+    eventUtils.addWheelListener(window, eventUtils.onWindowScrollDebounced)
+    els.content.on('scroll', onBoxScroll)
+    eventUtils.addWheelListener(els.content[0], onBoxScroll)
+    if (current.maskScrollThrough === false) {
+      eventUtils.addWheelListener(els.masks_wrap[0], stopMaskScroll)
+    }
   }
 
-
+  // Show the element
   els.tour.removeClass('hidden')
+
 }
 
 function doBefore(i) {
@@ -268,9 +281,30 @@ function finish(){
   service.current = null
 }
 
-function updateView(){
+function cleanup(){
+  // Hide the tour element
+  els.tour.addClass('hidden')
 
-  console.log('---')
+  els.canvas.css('opacity', null)
+
+  els.masks_wrap.css('pointer-events', null)
+
+  els.previous.off('click', previous)
+  els.next.off('click', next)
+  els.close.off('click', clickStop)
+
+  els.window.off('keydown', keyDown)
+  els.window.off('resize', eventUtils.onWindowScrollDebounced)
+  els.window.off('scroll', eventUtils.onWindowScrollDebounced)
+  eventUtils.removeWheelListener(window, eventUtils.onWindowScrollDebounced)
+  els.content.off('scroll', onBoxScroll)
+  eventUtils.removeWheelListener(els.content[0], onBoxScroll)
+  if (service.current.maskScrollThrough === false) {
+    eventUtils.removeWheelListener(els.masks_wrap[0], stopMaskScroll)
+  }
+}
+
+function updateView(){
 
   const current = service.current
   const steps = current.steps
@@ -288,11 +322,11 @@ function updateView(){
   }
 
   // HTML updates
-  els.step.text(index + 1)
-  els.length.text(steps.length)
-  els.innerContent.text(currentStep.content)
-  els.previous.text(currentStep.previousText || current.previousText)
-  els.next.text(currentStep.nextText || (index == steps.length - 1 ? current.finishText : current.nextText))
+  els.step.html(index + 1)
+  els.length.html(steps.length)
+  els.innerContent.html(currentStep.content)
+  els.previous.html(currentStep.previousText || current.previousText)
+  els.next.html(currentStep.nextText || (index == steps.length - 1 ? current.finishText : current.nextText))
 
   if(currentStep.showNext === undefined ? current.showNext : currentStep.showNext){
     els.next.css({display: null})
@@ -316,20 +350,19 @@ function updateView(){
   // Scroll the content box back to the top
   els.content[0].scrollTop = 0
 
-  console.log(target);
-
-  let target = findTarget();
-
+  findTarget()
   getDimensions()
+  return scrollToTarget()
+    .then(() => {
+      getDimensions()
+      !dims.first && (dims.first = true) && moveToTarget()
+      return moveToTarget()
+    })
+}
 
-  // Scroll target into view if not visible
-  console.log('elementIsVisible', elementIsVisible(target))
-  if (!elementIsVisible(target)) 
-    scrollToTarget(target);
-
-  // Move to the target
-  !dims.first && (dims.first = true) && moveToTarget(target)
-  return moveToTarget(target);
+function findTarget() {
+  const target = $(service.current.steps[service.current.index].target)
+  els.target = target.length ? target : null
 }
 
 function getDimensions() {
@@ -405,29 +438,75 @@ function getDimensions() {
   }
 }
 
-function scrollToTarget(target){
-  target.scrollIntoView({behavior: 'smooth'})
-        }
 
-function elementIsVisible(el){
-  let rect = el.getBoundingClientRect();
-  let elIsAboveViewport =  rect.bottom < 0
-  let elIsBelowViewport = rect.top > window.innerHeight;
-  console.log({elIsAboveViewport, elIsBelowViewport})
-  return !(elIsAboveViewport || elIsBelowViewport)
+function scrollToTarget() {
+  els.seeking = true
+  const newScrollTop = findScrollTop()
+  return new Promise((resolve, reject) => {
+    if (!newScrollTop) {
+      resolve()
+      els.seeking = false
+    } else {
+      TA.animate(
+        els.scroll[0].scrollTop,
+        newScrollTop,
+        service.current.animationDuration,
+        (d) => {
+          els.scroll[0].scrollTop = d
+        },
+        'easeOutQuad',
+        () => {
+          els.seeking = false
+          resolve()
+        }
+      )
+    }
+  })
 }
 
-function findTarget() {
-  const target = $(service.current.steps[service.current.index].target)
-  els.target = target.length ? target : null
-  return els.target[0];
+function findScrollTop() {
+
+  const maxHeight = service.current.maxHeight
+
+  // Is element to large to fit?
+  if (dims.target.margins.height > dims.scroll.height) {
+    // Is the element too far above us?
+    if (dims.target.offset.toBottom - maxHeight < dims.scroll.offset.top) {
+      return dims.scroll.scrollTop - (dims.scroll.offset.top - (dims.target.offset.toBottom - maxHeight))
+    }
+    // Is the element too far below us?
+    if (dims.target.offset.top + maxHeight > dims.scroll.offset.toBottom) {
+      return dims.scroll.scrollTop + ((dims.target.offset.top + maxHeight) - dims.scroll.offset.toBottom)
+    }
+    // Must be visible on both ends?
+    return
   }
 
-function moveToTarget(target) {
-  console.log('Call to moveToTarget with target:', target)
-  moveBoxToTarget(target)
-  return moveMasksToTarget(target)
+  // Is Element too far Above Us?
+  if (dims.target.margins.offset.top < dims.scroll.offset.top) {
+    return dims.scroll.scrollTop - (dims.scroll.offset.top - dims.target.margins.offset.top)
+  }
+
+  // Is Element too far Below Us?
+  if (dims.target.margins.offset.toBottom > dims.scroll.offset.toBottom) {
+    return dims.scroll.scrollTop + (dims.target.margins.offset.toBottom - dims.scroll.offset.toBottom)
+  }
 }
+
+function moveToTarget() {
+  moveBox()
+  return moveMasks()
+}
+
+
+
+
+// ########################################################################
+// HTML
+// ########################################################################
+
+
+
 
 const template = `
   <div id="Tour" class="hidden">
@@ -463,68 +542,140 @@ function injectTemplate(){
   wrap.outerHTML = template
 }
 
-function cleanup(){
-  // Hide the tour element
-  els.tour.addClass('hidden')
 
-  els.canvas.css('opacity', null)
 
-  els.masks_wrap.css('pointer-events', null)
+// ########################################################################
+// Events
+// ########################################################################
 
-  els.previous.off('click', previous)
-  els.next.off('click', next)
-  els.close.off('click', clickStop)
 
-  els.window.off('keydown', keyDown)
+
+function clickStop() {
+  if (service.current.canExit) {
+    stop()
+  }
+}
+
+function keyDown(e) {
+  switch (e.which) {
+    case 37:
+      previous()
+      prevent(e)
+      return
+    case 39:
+      next()
+      prevent(e)
+      return
+    case 27:
+      if (!service.current.disableEscExit) {
+        stop()
+        prevent(e)
+        return
+      }
+    case 38:
+    case 40:
+      onWindowScroll()
+      return
+  }
+}
+
+function stopMaskScroll(e) {
+  e.stopPropagation(e)
+  e.preventDefault(e)
+  e.returnValue = false
+  return false
+}
+
+function onBoxScroll(e) {
+  let delta
+  if (e.type == 'DOMMouseScroll') {
+    delta = e.detail * -40
+  } else {
+    delta = e.wheelDelta
+  }
+  const up = delta > 0
+  const scrollTop = els.content[0].scrollTop
+
+  if (up && !scrollTop) {
+    return prevent(e)
+  }
+  if (!up && (els.innerContent.height() - els.content.height() == scrollTop)) {
+    return prevent(e)
+  }
+}
+
+function prevent(e) {
+  e.stopPropagation(e)
+  e.preventDefault(e)
+  e.returnValue = false
+  return false
+}
+
+function onWindowScroll() {
+
+  if(els.seeking){
+    return
   }
 
-function moveBoxToTarget(target) {
-  const {current} = service
+  findTarget()
+  getDimensions()
+  return scrollToTarget()
+    .then(() => {
+      getDimensions()
+      return moveToTarget()
+    })
+}
+
+function stepExists(i){
+  return (i >= 0) && i < (service.current.steps.length)
+}
+
+
+
+
+
+
+function moveBox() {
+  const current = service.current
 
   if(!current){
     return
   }
 
-  const currentStep = current.steps[service.current.index]
-  const {maxHeight, maxWidth} = current
+  const currentStep = service.current.steps[service.current.index]
+  const maxHeight = service.current.maxHeight
+  const maxWidth = service.current.maxWidth
 
   // Default Position?
-  if (!target) {
+  if (!els.target) {
     placeCentered()
     return
   }
 
   const placementOptions = {
-    bottom,
-    right,
-    left,
-    top
+    bottom: bottom,
+    right: right,
+    left: left,
+    top: top
   }
 
   let placed = false
 
   const placement = currentStep.placement || service.current.placement
 
-  console.log({placement})
-
-  placement.forEach(priority => {
-    if (!placed) {
-      let success = placementOptions[priority]();
-      if(success){
-        console.log(`Successfully placed at ${priority}`)
+  placement.forEach((priority) => {
+    if (!placed && placementOptions[priority]()) {
       placed = true
-    }
     }
   })
 
-  // Fallback: If no placement works then place inside (the only place left to place it)
   if (!placed) {
-    console.log('Still not placed... falling back to placeInside()')
     placeInside('bottom', 'center')
   }
 
   return Promise.resolve(null)
 
+  // Placement Priorities
   function bottom() {
     // Can Below?
     if (dims.target.margins.offset.fromBottom > maxHeight) {
@@ -731,7 +882,7 @@ function moveBoxToTarget(target) {
   }
 }
 
-function moveMasksToTarget(target) {
+function moveMasks() {
 
   if(!service.current){
     return
@@ -763,18 +914,9 @@ function moveMasksToTarget(target) {
       top: dims.target.offset.top < 0 ? dims.target.offset.top + 'px' : 0
     })
 
-
-    let targetRect = target.getBoundingClientRect();
-    let bodyRect = document.body.getBoundingClientRect();
-
-    let topOffset = targetRect.top + targetRect.height - bodyRect.y;
-    let height = bodyRect.height - topOffset;
-
-    // let amtFromTargetToBottom = bodyRect.height
     els.masks_bottom.css({
-      height: height + 'px',
-      top: topOffset + 'px',
-      bottom: 'initial'
+      height: dims.target.offset.fromBottom + 'px',
+      bottom: dims.target.offset.fromBottom < 0 ? dims.target.offset.fromBottom + 'px' : 0
     })
     els.masks_left.css({
       top: dims.target.offset.top + 'px',
@@ -830,15 +972,15 @@ function moveMasksToTarget(target) {
 
   return new Promise((resolve, reject) => {
     TA.animate(0, 1, service.current.animationDuration, (d) => {
-     //   els.ctx.clearRect(0, 0, dims.window.width, dims.window.height)
+        els.ctx.clearRect(0, 0, dims.window.width, dims.window.height)
 
         dims.canvas.left = dims.canvas.left + ((left - dims.canvas.left) * d)
         dims.canvas.top = dims.canvas.top + ((top - dims.canvas.top) * d)
         dims.canvas.right = dims.canvas.right + ((right - dims.canvas.right) * d)
         dims.canvas.bottom = dims.canvas.bottom + ((bottom - dims.canvas.bottom) * d)
 
-       // drawEmptyRoundedRectangle(els.ctx, dims.canvas.left, dims.canvas.top, dims.canvas.right, dims.canvas.bottom, 5)
-        //els.ctx.fill()
+        drawEmptyRoundedRectangle(els.ctx, dims.canvas.left, dims.canvas.top, dims.canvas.right, dims.canvas.bottom, 5)
+        els.ctx.fill()
       }, 'easeOutQuad', () => {
         resolve()
       }
@@ -847,38 +989,8 @@ function moveMasksToTarget(target) {
 }
 
 
-// ########################################################################
-// Event Handlers
-// ########################################################################
 
-function clickStop() {
-  if (service.current.canExit) {
-    stop()
-  }
-}
 
-function keyDown(e) {
-  switch (e.which) {
-    case 37:
-      previous()
-      prevent(e)
-      return
-    case 39:
-      next()
-      prevent(e)
-      return
-    case 27:
-      if (!service.current.disableEscExit) {
-        stop()
-        prevent(e)
-        return
-      }
-    case 38:
-    case 40:
-      onWindowScroll()
-      return
-  }
-}
 
 
 // ########################################################################
@@ -911,6 +1023,8 @@ function drawEmptyRoundedRectangle (ctx, x, y, x2, y2, radius = 0) {
 
 
 
+
+
 // ########################################################################
 // Utils
 // ########################################################################
@@ -925,6 +1039,109 @@ function validPriorities(priorities){
   return true
 }
 
-function stepExists(i){
-  return (i >= 0) && i < (service.current.steps.length)
+function throttle(callback, limit) {
+  let wait = false
+  return function() {
+    if (!wait) {
+      callback.call()
+      wait = true
+      setTimeout(function() {
+        wait = false
+      }, limit)
+    }
+  }
+}
+
+function debounce(func, wait, immediate) {
+  let timeout
+  return function() {
+    const context = this,
+      args = arguments
+    const later = function() {
+      timeout = null
+      if (!immediate) func.apply(context, args)
+    }
+    const callNow = immediate && !timeout
+    clearTimeout(timeout)
+    timeout = setTimeout(later, wait)
+    if (callNow) func.apply(context, args)
+  }
+}
+
+
+function resolveEventSystem(){
+  let prefix = '', _addEventListener, _removeEventListener, onwheel, support
+
+  // detect event model
+  if (window.addEventListener) {
+    _addEventListener = "addEventListener"
+    _removeEventListener = "removeEventListener"
+  } else {
+    _addEventListener = "attachEvent"
+    _removeEventListener = "detachEvent"
+    prefix = "on"
+  }
+
+  // detect available wheel event
+  support = "onwheel" in document.createElement("div") ? "wheel" : // Modern browsers support "wheel"
+    document.onmousewheel !== undefined ? "mousewheel" : // Webkit and IE support at least "mousewheel"
+    "DOMMouseScroll" // let's assume that remaining browsers are older Firefox
+
+  eventUtils.addWheelListener = (elem, callback, useCapture) => {
+    _addWheelListener(elem, support, callback, useCapture)
+
+    // handle MozMousePixelScroll in older Firefox
+    if (support == "DOMMouseScroll") {
+      _addWheelListener(elem, "MozMousePixelScroll", callback, useCapture)
+    }
+  }
+
+  eventUtils.removeWheelListener = (elem, callback, useCapture) => {
+    _removeWheelListener(elem, support, callback, useCapture)
+
+    // handle MozMousePixelScroll in older Firefox
+    if (support == "DOMMouseScroll") {
+      _removeWheelListener(elem, "MozMousePixelScroll", callback, useCapture)
+    }
+  }
+
+  function _removeWheelListener(elem, eventName, callback, useCapture) {
+    elem[_removeEventListener](prefix + eventName, support == "wheel" ? callback : original, useCapture || false)
+  }
+
+  function _addWheelListener(elem, eventName, callback, useCapture) {
+    elem[_addEventListener](prefix + eventName, support == "wheel" ? callback : original, useCapture || false)
+  }
+
+  function original(originalEvent) {
+    !originalEvent && (originalEvent = window.event)
+
+    // create a normalized event object
+    const event = {
+      // keep a ref to the original event object
+      originalEvent: originalEvent,
+      target: originalEvent.target || originalEvent.srcElement,
+      type: "wheel",
+      deltaMode: originalEvent.type == "MozMousePixelScroll" ? 0 : 1,
+      deltaX: 0,
+      deltaZ: 0,
+      preventDefault: function() {
+        originalEvent.preventDefault ?
+          originalEvent.preventDefault() :
+          originalEvent.returnValue = false
+      }
+    }
+
+    // calculate deltaY (and deltaX) according to the event
+    if (support == "mousewheel") {
+      event.deltaY = -1 / 40 * originalEvent.wheelDelta
+      // Webkit also support wheelDeltaX
+      originalEvent.wheelDeltaX && (event.deltaX = -1 / 40 * originalEvent.wheelDeltaX)
+    } else {
+      event.deltaY = originalEvent.detail
+    }
+
+    // it's time to fire the callback
+    return callback(event)
+  }
 }
