@@ -1,8 +1,8 @@
 {
   "name": "tour",
-  "version": "2.0.3",
+  "version": "3.0.0",
   "description": "A simple, minimalist touring and on-boarding library for javascript",
-  "main": "src/tour.js",
+  "main": "dist/tour.js",
   "files": [
     "example",
     "dist",
