@@ -5,8 +5,8 @@ support-for-ie = false
 $buttonColor = #868686
 $successColor = #60bd68
 $dangerColor = #ec1d18
-$stepColor = rgba(0,0,0,0.7)
-$lengthColor = #CCC
+$stepColor = none
+$lengthColor = none
 $darkColor = rgba(0,0,0,0.8)
 
 #Tour
@@ -52,11 +52,8 @@ $darkColor = rgba(0,0,0,0.8)
         &:hover
           background:lighten($dangerColor, 10%)
           color:white
-      #Tour-step
-        background:white
-        color:$darkColor
-      #Tour-length
-        background: rgba(255,255,255,.2)
+      #Tour-step, #Tour-length
+        background:none
         color: #BABABA
       #Tour-tip
         &.left
@@ -168,7 +165,7 @@ $darkColor = rgba(0,0,0,0.8)
   #Tour-step, #Tour-length
     width: 24px
     height: 24px
-    color: white
+    color: black
     position: absolute
     bottom: 0.7em
     font-size: 12px
@@ -182,6 +179,11 @@ $darkColor = rgba(0,0,0,0.8)
     background: $stepColor
     left: 0.7em
     z-index: 1
+
+  #Tour-step::after{
+    margin-left: 5px
+    content: "/"
+  }
 
   #Tour-length
     background: $lengthColor
