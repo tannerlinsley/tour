@@ -11,10 +11,12 @@
   ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "watch": "parcel example/index.html --no-hmr",
-    "build": "parcel build example/index.html",
+    "watch:example": "parcel serve example/index.html --no-hmr",
+    "build:example": "parcel build example/index.html",
+    "watch:lib": "parcel serve src/tour.js",
+    "build:lib": "parcel build src/tour.js",
     "clean": "rm -r dist && mkdir dist",
-    "prepublish": "npm run build"
+    "prepublish": "npm run build:lib && npm run build:example"
   },
   "repository": {
     "type": "git",
