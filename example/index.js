@@ -1,4 +1,5 @@
 import Tour from '../src/Tour.js'
+import {html} from 'lit-html/lib/lit-extended';
 
 var myTour = window.myTour = {
   canExit: true,
@@ -50,7 +51,11 @@ var myTour = window.myTour = {
   }]
 }
 
-let tour = new Tour(myTour.steps)
+const config = {
+  customTemplate: () => html`hi`
+}
+
+let tour = new Tour(myTour.steps, config)
 console.log({tour})
 tour.start();
 

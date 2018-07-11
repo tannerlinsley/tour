@@ -12,7 +12,7 @@ export default class Tour {
     
     this.config = config;
     this.mask = new Mask({ alpha: 0.5 });
-    this.tourBox = new TourBox(this);
+    this.tourBox = new TourBox(this, config.customTemplate || null, config.customWrapperCSS || null);
     this.currentStep = 0;
 
     window.addEventListener('resize', evt => {
