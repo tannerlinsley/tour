@@ -55,7 +55,7 @@ export default class TourBox {
     let newY =  baseY + verticalShift
     this.goToPosition(newX, newY);
 
-    // Check that the width/height didn't change in the process (if they did we need to rerun again since cerntering will be thrown off)
+    // Check that the width/height didn't change in the process (if they did we need to rerun again since centering will be thrown off)
     // Explanation: Sometimes the browser will rerender the div when you move it to help fit its contents in the viewport (ie if you try to smush the tour div onto the right side of the screen partially, it'll resize to fit)
     let newWrapperRect = this.wrapper.getBoundingClientRect()
     if(wrapperRect.width !==  newWrapperRect.width || wrapperRect.height !== newWrapperRect.height){
@@ -74,15 +74,15 @@ export default class TourBox {
         break;
       case 'top':
         horizontalShift += horizontalCenter(targetRect) - horizontalCenter(wrapperRect);
-        verticalShift -= wrapperRect.height + this.offsetY
+        verticalShift -= wrapperRect.height + this.offsetY;
         break;
       case 'left':
-        verticalShift += verticalCenter(targetRect) - verticalCenter(wrapperRect)
-        horizontalShift -= wrapperRect.width + this.offsetX
+        verticalShift += verticalCenter(targetRect) - verticalCenter(wrapperRect);
+        horizontalShift -= wrapperRect.width + this.offsetX;
         break;
       case 'right': 
-      verticalShift += verticalCenter(targetRect) - verticalCenter(wrapperRect)
-      horizontalShift += targetRect.width + this.offsetX
+      verticalShift += verticalCenter(targetRect) - verticalCenter(wrapperRect);
+      horizontalShift += targetRect.width + this.offsetX;
       break;
     }
   

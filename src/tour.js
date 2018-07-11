@@ -8,23 +8,23 @@ export default class Tour {
     
     this.steps.forEach(step => {
       step.target = typeof step.target === 'string' ? document.querySelector(step.target) : step.target
-    })
+    });
     
     this.config = config;
     this.mask = new Mask({ alpha: 0.5 });
     this.tourBox = new TourBox(this, config.customTemplate || null, config.customWrapperCSS || null);
     this.currentStep = 0;
 
-    window.addEventListener('resize', evt => {
+    window.addEventListener('resize', () => {
       // Reinitialize the mask canvas
-      this.mask.resizeCanvasToFillBody()
-      // Rerender the current step
+      this.mask.resizeCanvasToFillBody();
+      // Re-render the current step
       this.renderStep(this.currentStep)
     })
   }
 
   renderStep(stepIndex) {
-    let step = this.steps[stepIndex]
+    let step = this.steps[stepIndex];
 
     // Run before hook
     if(step.before){
@@ -42,12 +42,10 @@ export default class Tour {
 
     // Scroll the target into view if necessary
     if(!elementIsVisible(step.target)){
-      console.log('scrolling for target')
       step.target.scrollIntoView({behavior: 'smooth'})
     }
     // Scroll the tour into view if necessary
     if(!elementIsVisible(this.tourBox.wrapper)){
-      console.log('scrolling for wrapper')
       this.tourBox.wrapper.scrollIntoView({behavior: 'smooth'})
     }
 

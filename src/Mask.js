@@ -17,7 +17,7 @@ export default class Mask {
     let targetRect = target.getBoundingClientRect();
     let bodyRect = document.body.getBoundingClientRect();
 
-    this.refill()
+    this.refill();
 
     this.createHoleAtPosition({
       x: targetRect.x - bodyRect.x,
@@ -47,7 +47,7 @@ export default class Mask {
   }
 
   refill(){
-    this.clearFill()
+    this.clearFill();
     this.fill()
   }
 
