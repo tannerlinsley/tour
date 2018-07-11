@@ -1,4 +1,4 @@
-import {createCanvas} from './utils/dom'
+import {createElement, setCanvasDimensions} from './utils/dom'
 
 export default class Mask {
   MASK_CSS = `
@@ -10,17 +10,16 @@ export default class Mask {
 
   constructor({alpha}) {
     this.alpha = alpha;
-
-    this._initCanvas();
+    this.initCanvas();
   }
 
   mask(target){
     let targetRect = target.getBoundingClientRect();
     let bodyRect = document.body.getBoundingClientRect();
 
-    this._refill()
+    this.refill()
 
-    this._createHoleAtPosition({
+    this.createHoleAtPosition({
       x: targetRect.x - bodyRect.x,
       y: targetRect.y - bodyRect.y,
       width: targetRect.width,
@@ -29,30 +28,39 @@ export default class Mask {
   }
 
 
-  _initCanvas() {
-    // Create a canvas spanning the whole body
-    let bodyRect = document.body.getBoundingClientRect();
-    this.canvas = createCanvas(bodyRect.width, bodyRect.height, this.MASK_CSS);
+  cleanup(){
+    this.clearFill()
+  }
 
+  initCanvas() {
+    // Create a canvas spanning the whole body
+    this.canvas = createElement('canvas', this.MASK_CSS);
+    this.resizeCanvasToFillBody();
+    
     // Get the context
     this.ctx = this.canvas.getContext("2d");
   }
 
-  _refill(){
-    this._clearFill()
-    this._fill()
+  resizeCanvasToFillBody(){
+    let bodyRect = document.body.getBoundingClientRect();
+    setCanvasDimensions(this.canvas, bodyRect.width, bodyRect.height)
   }
 
-  _fill() {
+  refill(){
+    this.clearFill()
+    this.fill()
+  }
+
+  fill() {
     this.ctx.fillStyle = `rgba(0,0,0,${this.alpha})`;
     this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
   }
 
-  _createHoleAtPosition(position) {
+  createHoleAtPosition(position) {
     this.ctx.clearRect(position.x, position.y, position.width, position.height);
   }
 
-  _clearFill(){
-    this._createHoleAtPosition({x: 0, y: 0, width: this.canvas.width, height: this.canvas.height})
+  clearFill(){
+    this.createHoleAtPosition({x: 0, y: 0, width: this.canvas.width, height: this.canvas.height})
   }
 }

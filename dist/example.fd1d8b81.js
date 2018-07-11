@@ -103,28 +103,14 @@ parcelRequire = (function (modules, cache, entry, globalName) {
 
   // Override the current require with this new one
   return newRequire;
-})({11:[function(require,module,exports) {
+})({17:[function(require,module,exports) {
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.createCanvas = createCanvas;
 exports.createElement = createElement;
-function createCanvas(width, height, cssStyles) {
-  var canvas = createElement('canvas', cssStyles);
-
-  // Set the CSS width and height
-  canvas.style.width = width + 'px';
-  canvas.style.height = height + 'px';
-
-  // Set the canvas' internal width and height
-  canvas.width = width;
-  canvas.height = height;
-
-  return canvas;
-}
-
+exports.setCanvasDimensions = setCanvasDimensions;
 function createElement(tagName, css) {
   // Create the element
   var el = document.createElement(tagName);
@@ -137,8 +123,18 @@ function createElement(tagName, css) {
 
   return el;
 }
-},{}],17:[function(require,module,exports) {
-"use strict";
+
+function setCanvasDimensions(canvas, width, height) {
+  // Set the CSS width and height
+  canvas.style.width = width + 'px';
+  canvas.style.height = height + 'px';
+
+  // Set the canvas' internal width and height
+  canvas.width = width;
+  canvas.height = height;
+}
+},{}],12:[function(require,module,exports) {
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
   value: true
@@ -146,7 +142,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _dom = require("./utils/dom");
+var _dom = require('./utils/dom');
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -156,22 +152,21 @@ var Mask = function () {
 
     _classCallCheck(this, Mask);
 
-    this.MASK_CSS = "\n    position: absolute;\n    top: 0px;\n    left: 0px;\n    z-index: 99999999999999;\n  ";
+    this.MASK_CSS = '\n    position: absolute;\n    top: 0px;\n    left: 0px;\n    z-index: 99999999999999;\n  ';
 
     this.alpha = alpha;
-
-    this._initCanvas();
+    this.initCanvas();
   }
 
   _createClass(Mask, [{
-    key: "mask",
+    key: 'mask',
     value: function mask(target) {
       var targetRect = target.getBoundingClientRect();
       var bodyRect = document.body.getBoundingClientRect();
 
-      this._refill();
+      this.refill();
 
-      this._createHoleAtPosition({
+      this.createHoleAtPosition({
         x: targetRect.x - bodyRect.x,
         y: targetRect.y - bodyRect.y,
         width: targetRect.width,
@@ -179,36 +174,47 @@ var Mask = function () {
       });
     }
   }, {
-    key: "_initCanvas",
-    value: function _initCanvas() {
+    key: 'cleanup',
+    value: function cleanup() {
+      this.clearFill();
+    }
+  }, {
+    key: 'initCanvas',
+    value: function initCanvas() {
       // Create a canvas spanning the whole body
-      var bodyRect = document.body.getBoundingClientRect();
-      this.canvas = (0, _dom.createCanvas)(bodyRect.width, bodyRect.height, this.MASK_CSS);
+      this.canvas = (0, _dom.createElement)('canvas', this.MASK_CSS);
+      this.resizeCanvasToFillBody();
 
       // Get the context
       this.ctx = this.canvas.getContext("2d");
     }
   }, {
-    key: "_refill",
-    value: function _refill() {
-      this._clearFill();
-      this._fill();
+    key: 'resizeCanvasToFillBody',
+    value: function resizeCanvasToFillBody() {
+      var bodyRect = document.body.getBoundingClientRect();
+      (0, _dom.setCanvasDimensions)(this.canvas, bodyRect.width, bodyRect.height);
     }
   }, {
-    key: "_fill",
-    value: function _fill() {
-      this.ctx.fillStyle = "rgba(0,0,0," + this.alpha + ")";
+    key: 'refill',
+    value: function refill() {
+      this.clearFill();
+      this.fill();
+    }
+  }, {
+    key: 'fill',
+    value: function fill() {
+      this.ctx.fillStyle = 'rgba(0,0,0,' + this.alpha + ')';
       this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
     }
   }, {
-    key: "_createHoleAtPosition",
-    value: function _createHoleAtPosition(position) {
+    key: 'createHoleAtPosition',
+    value: function createHoleAtPosition(position) {
       this.ctx.clearRect(position.x, position.y, position.width, position.height);
     }
   }, {
-    key: "_clearFill",
-    value: function _clearFill() {
-      this._createHoleAtPosition({ x: 0, y: 0, width: this.canvas.width, height: this.canvas.height });
+    key: 'clearFill',
+    value: function clearFill() {
+      this.createHoleAtPosition({ x: 0, y: 0, width: this.canvas.width, height: this.canvas.height });
     }
   }]);
 
@@ -216,7 +222,7 @@ var Mask = function () {
 }();
 
 exports.default = Mask;
-},{"./utils/dom":11}],25:[function(require,module,exports) {
+},{"./utils/dom":17}],18:[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -228,7 +234,7 @@ var horizontalCenter = exports.horizontalCenter = function horizontalCenter(rect
 var verticalCenter = exports.verticalCenter = function verticalCenter(rect) {
   return rect.height / 2;
 };
-},{}],12:[function(require,module,exports) {
+},{}],24:[function(require,module,exports) {
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -865,7 +871,7 @@ const removeNodes = exports.removeNodes = (container, startNode, endNode = null)
     }
 };
 //# sourceMappingURL=lit-html.js.map
-},{}],29:[function(require,module,exports) {
+},{}],22:[function(require,module,exports) {
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1009,15 +1015,31 @@ class EventPart {
     }
 }
 exports.EventPart = EventPart; //# sourceMappingURL=lit-extended.js.map
-},{"../lit-html.js":12}],15:[function(require,module,exports) {
+},{"../lit-html.js":24}],16:[function(require,module,exports) {
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-var boxCSS = exports.boxCSS = '\n  background-color: white;\n  color: black;\n  padding: 15px;\n  box-shadow: 0px 0px 9px #636363;\n  max-width:300px;\n';
+exports.DEFAULT_WRAPPER_CSS = exports.DEFAULT_TEMPLATE = undefined;
 
-var arrowCSS = exports.arrowCSS = function arrowCSS(orientation) {
+var _templateObject = _taggedTemplateLiteral(['\n  <div style="', '">\n    <span style=', '" on-click=', '>x</span>\n    <h3 style="font-weight:bold">', '</h3>\n    <div>', '</div>\n    <div class="controls" style="overflow: hidden; padding: 10px;">\n      <span class="actions" style="float: right">\n        <button on-click=', '>Previous</button>\n        <button on-click=', '>Next</button>\n      </span>\n    </div>\n  </div>\n'], ['\n  <div style="', '">\n    <span style=', '" on-click=', '>x</span>\n    <h3 style="font-weight:bold">', '</h3>\n    <div>', '</div>\n    <div class="controls" style="overflow: hidden; padding: 10px;">\n      <span class="actions" style="float: right">\n        <button on-click=', '>Previous</button>\n        <button on-click=', '>Next</button>\n      </span>\n    </div>\n  </div>\n']);
+
+var _litExtended = require('lit-html/lib/lit-extended');
+
+function _taggedTemplateLiteral(strings, raw) { return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
+
+var DEFAULT_TEMPLATE = exports.DEFAULT_TEMPLATE = function DEFAULT_TEMPLATE(data, eventHandlers, orientation) {
+  return (0, _litExtended.html)(_templateObject, boxCSS, closeButtonCSS, eventHandlers.close, data.title, data.content, eventHandlers.previous, eventHandlers.next);
+};
+
+var DEFAULT_WRAPPER_CSS = exports.DEFAULT_WRAPPER_CSS = '\n  position: absolute;\n  z-index: 999999999999999;\n';
+
+var boxCSS = '\n  background-color: white;\n  color: black;\n  padding: 15px;\n  box-shadow: 0px 0px 9px #636363;\n  max-width:300px;\n';
+
+var closeButtonCSS = '\n  float: right;\n  position: relative;\n  cursor: pointer;\n  top: -5px;\n  padding: 5px;\n  color: #aaa;\n';
+
+var arrowCSS = function arrowCSS(orientation) {
   var COLOR = 'grey';
 
   switch (orientation) {
@@ -1033,9 +1055,7 @@ var arrowCSS = exports.arrowCSS = function arrowCSS(orientation) {
       return '\n            width: 0; \n            height: 0; \n            border-top: 10px solid transparent;\n            border-bottom: 10px solid transparent; \n            \n            border-right:10px solid ' + COLOR + '; \n          ';
   }
 };
-
-var closeButtonCSS = exports.closeButtonCSS = '\n  float: right;\n  position: relative;\n  cursor: pointer;\n  top: -5px;\n  padding: 5px;\n  color: #aaa;\n';
-},{}],9:[function(require,module,exports) {
+},{"lit-html/lib/lit-extended":22}],13:[function(require,module,exports) {
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1044,52 +1064,47 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _templateObject = _taggedTemplateLiteral(['\n  <div style="', '">\n    <span style=', '" on-click=', '>x</span>\n    <div style="font-weight:bold">', '</div>\n    <div>', '</div>\n  </div>\n'], ['\n  <div style="', '">\n    <span style=', '" on-click=', '>x</span>\n    <div style="font-weight:bold">', '</div>\n    <div>', '</div>\n  </div>\n']);
-
 var _dom = require('./utils/dom');
 
 var _orientation = require('./utils/orientation');
 
 var _litExtended = require('lit-html/lib/lit-extended');
 
-var lit = _interopRequireWildcard(_litExtended);
-
-var _defaultStyles = require('./defaultStyles');
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+var _defaults = require('./defaults');
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-function _taggedTemplateLiteral(strings, raw) { return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
-
-var DEFAULT_TEMPLATE = function DEFAULT_TEMPLATE(data, eventHandlers, orientation) {
-  return lit.html(_templateObject, _defaultStyles.boxCSS, _defaultStyles.closeButtonCSS, eventHandlers.close, data.title, data.content);
-};
-
-var DEFAULT_WRAPPER_CSS = '\n  position: absolute;\n  z-index: 999999999999999;\n';
-
 var TourBox = function () {
-  function TourBox(template, wrapperCSS) {
+  function TourBox(tour, template, wrapperCSS) {
     _classCallCheck(this, TourBox);
 
     this.offsetX = 10;
     this.offsetY = 10;
-    this.eventHandlers = {
-      close: this.closeButtonClickHandler.bind(this)
-    };
 
     // Initialize the class properties
-    this.template = template || DEFAULT_TEMPLATE;
-    this.wrapperCSS = wrapperCSS || DEFAULT_WRAPPER_CSS;
+    this.tour = tour;
+    this.template = template || _defaults.DEFAULT_TEMPLATE;
+    this.wrapperCSS = wrapperCSS || _defaults.DEFAULT_WRAPPER_CSS;
 
-    // Create the wrapper div
-    this.wrapper = (0, _dom.createElement)('div', this.wrapperCSS);
+    // Setup the event handlers
+    this.eventHandlers = {
+      close: this.tour.stop.bind(this.tour),
+      next: this.tour.nextStep.bind(this.tour),
+      previous: this.tour.previousStep.bind(this.tour)
+
+      // Create the wrapper div
+    };this.wrapper = (0, _dom.createElement)('div', this.wrapperCSS);
   }
 
   _createClass(TourBox, [{
     key: 'render',
     value: function render(data) {
-      lit.render(this.template(data, this.eventHandlers), this.wrapper);
+      (0, _litExtended.render)(this.template(data, this.eventHandlers), this.wrapper);
+    }
+  }, {
+    key: 'cleanup',
+    value: function cleanup() {
+      this.wrapper.remove();
     }
   }, {
     key: 'goToPosition',
@@ -1158,57 +1173,145 @@ var TourBox = function () {
 
       return { horizontalShift: horizontalShift, verticalShift: verticalShift };
     }
-  }, {
-    key: 'closeButtonClickHandler',
-    value: function closeButtonClickHandler() {
-      console.log('hiiii', this);
-    }
   }]);
 
   return TourBox;
 }();
 
 exports.default = TourBox;
-},{"./utils/dom":11,"./utils/orientation":25,"lit-html/lib/lit-extended":29,"./defaultStyles":15}],7:[function(require,module,exports) {
+},{"./utils/dom":17,"./utils/orientation":18,"lit-html/lib/lit-extended":22,"./defaults":16}],10:[function(require,module,exports) {
 "use strict";
 
-var _Mask = require("../src2/Mask");
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _Mask = require("./Mask");
 
 var _Mask2 = _interopRequireDefault(_Mask);
 
-var _TourBox = require("../src2/TourBox");
+var _TourBox = require("./TourBox");
 
 var _TourBox2 = _interopRequireDefault(_TourBox);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-if (module.hot) {
-  module.hot.accept(function () {
-    location.reload();
-  });
-}
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var mask = new _Mask2.default({ alpha: 0.5 });
-var tourBox = new _TourBox2.default();
+var Tour = function () {
+  function Tour() {
+    var _this = this;
 
-function tourStep(stepData, target) {
-  tourBox.render(stepData);
-  tourBox.goToElement(target);
-  mask.mask(target);
-}
+    var steps = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+    var config = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
-// Example call:
-var target = document.querySelector("#features");
-var exampleStepData = { title: "Hello", content: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum" };
-tourStep(exampleStepData, target);
+    _classCallCheck(this, Tour);
 
-window.tourStep = tourStep;
-},{"../src2/Mask":17,"../src2/TourBox":9}],3:[function(require,module,exports) {
+    // Initialize the class
+    this.steps = steps;
+
+    this.steps.forEach(function (step) {
+      step.target = typeof step.target === 'string' ? document.querySelector(step.target) : step.target;
+    });
+
+    this.config = config;
+    this.mask = new _Mask2.default({ alpha: 0.5 });
+    this.tourBox = new _TourBox2.default(this);
+    this.currentStep = 0;
+
+    window.addEventListener('resize', function (evt) {
+      // Reinitialize the mask canvas
+      _this.mask.resizeCanvasToFillBody();
+      // Rerender the current step
+      _this.displayCurrentStep();
+    });
+  }
+
+  _createClass(Tour, [{
+    key: "displayStep",
+    value: function displayStep(step) {
+      // Run before hook
+      if (step.before) {
+        step.before();
+      }
+
+      // Display the step
+      this.tourBox.render(step.data);
+      this.tourBox.goToElement(step.target);
+      this.mask.mask(step.target);
+
+      // Run the after hook
+      if (step.after) {
+        step.after();
+      }
+    }
+  }, {
+    key: "displayCurrentStep",
+    value: function displayCurrentStep() {
+      this.displayStep(this.steps[this.currentStep]);
+    }
+  }, {
+    key: "start",
+    value: function start() {
+      var _this2 = this;
+
+      // Display the first step
+      this.displayCurrentStep();
+
+      // Return a promise
+      return new Promise(function (resolve, reject) {
+        _this2.promiseResolve = resolve;
+        _this2.promiseReject = reject;
+      });
+    }
+  }, {
+    key: "nextStep",
+    value: function nextStep() {
+      if (++this.currentStep < this.steps.length) {
+        this.displayCurrentStep();
+      } else {
+        this.done();
+      }
+    }
+  }, {
+    key: "previousStep",
+    value: function previousStep() {
+      if (--this.currentStep > -1) {
+        this.displayCurrentStep();
+      }
+    }
+  }, {
+    key: "cleanup",
+    value: function cleanup() {
+      this.tourBox.cleanup();
+      this.mask.cleanup();
+    }
+  }, {
+    key: "done",
+    value: function done() {
+      this.cleanup();
+      this.promiseResolve("Done :)");
+    }
+  }, {
+    key: "stop",
+    value: function stop() {
+      this.cleanup();
+      this.promiseReject("Tour closed by user");
+    }
+  }]);
+
+  return Tour;
+}();
+
+exports.default = Tour;
+},{"./Mask":12,"./TourBox":13}],5:[function(require,module,exports) {
 'use strict';
 
-var _newtour = require('../src/newtour.js');
+var _Tour = require('../src/Tour.js');
 
-var _newtour2 = _interopRequireDefault(_newtour);
+var _Tour2 = _interopRequireDefault(_Tour);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -1216,77 +1319,65 @@ var myTour = window.myTour = {
   canExit: true,
   steps: [{
     target: '#features',
-    content: "Let's take a look at some features!"
+    data: {
+      content: "Let's take a look at some features!"
+    }
   }, {
     target: '#feature1',
-    content: "No matter the browser size, I'm always in the right spot. Try resizing!"
+    data: { content: "No matter the browser size, I'm always in the right spot. Try resizing!" }
   }, {
     target: '#feature2',
-    content: "By default, Tour puts your tooltips in the perfect spot, automagically!"
+    data: { content: "By default, Tour puts your tooltips in the perfect spot, automagically!" }
   }, {
     target: '#feature3',
-    content: "Promises are built in by default along with powerful before and after hooks for each step!"
+    data: { content: "Promises are built in by default along with powerful before and after hooks for each step!" }
   }, {
     target: '#feature4',
-    content: "Unlike intro.js, ng-joyride, and others, Tour.js will NOT relayer your elements, shuffle your z-indices or manipulate your existing DOM in any way."
+    data: { content: "Unlike intro.js, ng-joyride, and others, Tour.js will NOT relayer your elements, shuffle your z-indices or manipulate your existing DOM in any way." }
   }, {
     target: '#vader',
-    content: "Luke, come to the dark side... it's easily themable ;)",
+    data: { content: "Luke, come to the dark side... it's easily themable ;)" },
     before: function before() {
-      return new Promise(function (resolve, reject) {
-
-        var vaderEl = document.getElementById('vader');
-        vaderEl.style.opacity = '1';
-
-        var boxEl = document.getElementById('Tour-box');
-        boxEl.className += ' ' + 'dark-box';
-
-        resolve();
-      });
+      console.log('Before works!');
     },
     after: function after() {
-      return new Promise(function (resolve, reject) {
-
-        var vaderEl = document.getElementById('vader');
-        vaderEl.style.opacity = '0';
-
-        var boxEl = document.getElementById('Tour-box');
-        var classes = boxEl.className.split(' ');
-        classes = classes.filter(function (d) {
-          return d !== 'dark-box';
-        });
-        boxEl.className = classes.join(' ');
-
-        resolve();
-      });
+      console.log('After works');
     }
   }, {
     target: '#installation',
-    content: "Installation is a breeze, and Tour.js is a lightweight (weighing in at about 12kb gzipped!)"
+    data: { content: "Installation is a breeze, and Tour.js is a lightweight (weighing in at about 12kb gzipped!)" }
   }, {
     target: '#usage',
-    content: "Tours are ridiculously easy to build."
+    data: { content: "Tours are ridiculously easy to build." }
   }, {
     target: '#config',
-    content: "And customization is a snap! These are the defaults which you can override globally, per tour, or per step."
+    data: { content: "And customization is a snap! These are the defaults which you can override globally, per tour, or per step." }
   }, {
     target: '#api',
-    content: "A clean and simple API to get the job done."
+    data: { content: "A clean and simple API to get the job done." }
   }, {
     target: '#promises',
-    content: "Built in hooks let you fine-tune and control your app state as the tour progresses!"
+    data: { content: "Built in hooks let you fine-tune and control your app state as the tour progresses!" }
   }, {
     target: '#forkme_banner',
-    content: "I'll let you take it from here. <h4 style='text-align:right'><strong><3 <a href='http://github.com/tourjs'>tourjs</a></h4> "
+    data: { content: "I'll let you take it from here. <h4 style='text-align:right'><strong><3 <a href='http://github.com/tourjs'>tourjs</a></h4> " }
   }]
-
-  // console.log('Tour', tour)
-  // let tour = new Tour(myTour)
-  // console.log({tour})
-  // // tour.start();
-
 };
-},{"../src/newtour.js":7}],8:[function(require,module,exports) {
+
+var tour = new _Tour2.default(myTour.steps);
+console.log({ tour: tour });
+tour.start();
+
+if (module.hot) {
+  module.hot.dispose(function () {
+    tour.done();
+  });
+
+  module.hot.accept(function () {
+    tour.start();
+  });
+}
+},{"../src/Tour.js":10}],26:[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 
@@ -1315,7 +1406,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = '' || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + '51408' + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + '54118' + '/');
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);
 
@@ -1456,5 +1547,5 @@ function hmrAccept(bundle, id) {
     return hmrAccept(global.parcelRequire, id);
   });
 }
-},{}]},{},[8,3], null)
+},{}]},{},[26,5], null)
 //# sourceMappingURL=/example.fd1d8b81.map

@@ -1,41 +1,36 @@
 import { createElement } from './utils/dom';
 import { horizontalCenter, verticalCenter } from './utils/orientation';
-import * as lit from 'lit-html/lib/lit-extended';
-import {boxCSS, closeButtonCSS} from './defaultStyles'
+import {render} from 'lit-html/lib/lit-extended';
+import {DEFAULT_TEMPLATE, DEFAULT_WRAPPER_CSS} from './defaults'
 
-
-const DEFAULT_TEMPLATE = (data, eventHandlers, orientation) => lit.html`
-  <div style="${boxCSS}">
-    <span style=${closeButtonCSS}" on-click=${eventHandlers.close}>x</span>
-    <div style="font-weight:bold">${data.title}</div>
-    <div>${data.content}</div>
-  </div>
-`;
-
-const DEFAULT_WRAPPER_CSS = `
-  position: absolute;
-  z-index: 999999999999999;
-`;
 
 export default class TourBox {
   offsetX = 10;
   offsetY = 10;
 
-  eventHandlers = {
-    close: this.closeButtonClickHandler.bind(this)
-  }
-
-  constructor(template, wrapperCSS) {
+  constructor(tour, template, wrapperCSS) {
     // Initialize the class properties
+    this.tour = tour;
     this.template = template || DEFAULT_TEMPLATE;
     this.wrapperCSS = wrapperCSS || DEFAULT_WRAPPER_CSS;
+
+    // Setup the event handlers
+    this.eventHandlers = {
+      close: this.tour.stop.bind(this.tour),
+      next: this.tour.nextStep.bind(this.tour),
+      previous: this.tour.previousStep.bind(this.tour)
+    }
 
     // Create the wrapper div
     this.wrapper = createElement('div', this.wrapperCSS);
   }
 
   render(data) {
-    lit.render(this.template(data, this.eventHandlers), this.wrapper);
+    render(this.template(data, this.eventHandlers), this.wrapper);
+  }
+
+  cleanup(){
+    this.wrapper.remove()
   }
 
   goToPosition(x, y) {
@@ -93,9 +88,5 @@ export default class TourBox {
     }
   
     return {horizontalShift, verticalShift}
-  }
-
-  closeButtonClickHandler(){
-    console.log('hiiii', this)
   }
 }

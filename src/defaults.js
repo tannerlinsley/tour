@@ -1,4 +1,26 @@
-export const boxCSS = `
+
+import {html} from 'lit-html/lib/lit-extended';
+
+export const DEFAULT_TEMPLATE = (data, eventHandlers, orientation) => html`
+  <div style="${boxCSS}">
+    <span style=${closeButtonCSS}" on-click=${eventHandlers.close}>x</span>
+    <h3 style="font-weight:bold">${data.title}</h3>
+    <div>${data.content}</div>
+    <div class="controls" style="overflow: hidden; padding: 10px;">
+      <span class="actions" style="float: right">
+        <button on-click=${eventHandlers.previous}>Previous</button>
+        <button on-click=${eventHandlers.next}>Next</button>
+      </span>
+    </div>
+  </div>
+`;
+
+export const DEFAULT_WRAPPER_CSS = `
+  position: absolute;
+  z-index: 999999999999999;
+`;
+
+const boxCSS = `
   background-color: white;
   color: black;
   padding: 15px;
@@ -6,9 +28,16 @@ export const boxCSS = `
   max-width:300px;
 `;
 
+const closeButtonCSS = `
+  float: right;
+  position: relative;
+  cursor: pointer;
+  top: -5px;
+  padding: 5px;
+  color: #aaa;
+`
 
-
-export let arrowCSS = orientation => {
+let arrowCSS = orientation => {
   const COLOR = 'grey'
 
   switch (orientation) {
@@ -49,12 +78,3 @@ export let arrowCSS = orientation => {
           `;
   }
 };
-
-export const closeButtonCSS = `
-  float: right;
-  position: relative;
-  cursor: pointer;
-  top: -5px;
-  padding: 5px;
-  color: #aaa;
-`
