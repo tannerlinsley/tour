@@ -1,5 +1,4 @@
 node_modules
 .cache
-
-npm-debug.log
 dist
+npm-debug.log
