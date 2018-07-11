@@ -41,6 +41,8 @@ const errors = {
   }
 }
 
+console.log('sup');
+
 // The exported API
 const service = {
   current: null,

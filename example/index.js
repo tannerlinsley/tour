@@ -1,4 +1,4 @@
-import Tour from '../src/tour.js'
+import Tour from '../src/newtour.js'
 
 var myTour = window.myTour = {
   canExit: true,
@@ -69,6 +69,8 @@ var myTour = window.myTour = {
   }]
 }
 
-window.start = function(){
-  Tour.start(myTour)
-}
+
+// console.log('Tour', tour)
+// let tour = new Tour(myTour)
+// console.log({tour})
+// // tour.start();
