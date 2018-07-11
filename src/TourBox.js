@@ -9,7 +9,7 @@ export default class TourBox {
   offsetY = 10;
 
   constructor(tour, template, wrapperCSS) {
-    // Initialize the class properties
+    // Initialize stuff
     this.tour = tour;
     this.template = template || DEFAULT_TEMPLATE;
     this.wrapperCSS = wrapperCSS || DEFAULT_WRAPPER_CSS;
@@ -25,8 +25,8 @@ export default class TourBox {
     this.wrapper = createElement('div', this.wrapperCSS);
   }
 
-  render(data) {
-    render(this.template(data, this.eventHandlers), this.wrapper);
+  render(data, progress) {
+    render(this.template(data, this.eventHandlers, progress), this.wrapper);
   }
 
   cleanup(){
@@ -59,7 +59,6 @@ export default class TourBox {
     // Explanation: Sometimes the browser will rerender the div when you move it to help fit its contents in the viewport (ie if you try to smush the tour div onto the right side of the screen partially, it'll resize to fit)
     let newWrapperRect = this.wrapper.getBoundingClientRect()
     if(wrapperRect.width !==  newWrapperRect.width || wrapperRect.height !== newWrapperRect.height){
-      console.log('Looks like the browser decided to screww us over...')
       this.goToElement(target, orientation)
     }
   }

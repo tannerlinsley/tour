@@ -20,3 +20,10 @@ export function setCanvasDimensions(canvas, width, height){
   canvas.width = width;
   canvas.height = height;
 }
+
+export function elementIsVisible(el){
+  let rect = el.getBoundingClientRect();
+  let elIsAboveViewport =  rect.bottom < 0
+  let elIsBelowViewport = rect.top > window.innerHeight;
+  return !(elIsAboveViewport || elIsBelowViewport)
+}

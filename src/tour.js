@@ -1,9 +1,9 @@
 import Mask from "./Mask";
 import TourBox from "./TourBox";
+import {elementIsVisible} from './utils/dom'
 
 export default class Tour {
   constructor(steps = [], config = {}) {
-    // Initialize the class
     this.steps = steps;
     
     this.steps.forEach(step => {
@@ -19,21 +19,37 @@ export default class Tour {
       // Reinitialize the mask canvas
       this.mask.resizeCanvasToFillBody()
       // Rerender the current step
-      this.displayCurrentStep()
+      this.renderStep(this.currentStep)
     })
   }
 
-  displayStep(step) {
+  renderStep(stepIndex) {
+    let step = this.steps[stepIndex]
+
     // Run before hook
     if(step.before){
       step.before();
     }
+    
+    // Compute the current progress
+    let progress = {current: stepIndex + 1, total: this.steps.length}
 
     // Display the step
-    this.tourBox.render(step.data);
+    this.tourBox.render(step.data, progress);
     this.tourBox.goToElement(step.target);
     this.mask.mask(step.target);
 
+
+    // Scroll the target into view if necessary
+    if(!elementIsVisible(step.target)){
+      console.log('scrolling for target')
+      step.target.scrollIntoView({behavior: 'smooth'})
+    }
+    // Scroll the tour into view if necessary
+    if(!elementIsVisible(this.tourBox.wrapper)){
+      console.log('scrolling for wrapper')
+      this.tourBox.wrapper.scrollIntoView({behavior: 'smooth'})
+    }
 
     // Run the after hook
     if(step.after){
@@ -41,13 +57,9 @@ export default class Tour {
     }
   }
 
-  displayCurrentStep() {
-    this.displayStep(this.steps[this.currentStep]);
-  }
-
   start() {
     // Display the first step
-    this.displayCurrentStep();
+    this.renderStep(0);
 
     // Return a promise
     return new Promise((resolve, reject) => {
@@ -58,7 +70,7 @@ export default class Tour {
 
   nextStep() {
     if (++this.currentStep < this.steps.length) {
-      this.displayCurrentStep();
+      this.renderStep(this.currentStep);
     } else {
       this.done();
     }
@@ -66,7 +78,7 @@ export default class Tour {
 
   previousStep() {
     if (--this.currentStep > -1) {
-      this.displayCurrentStep();
+      this.renderStep(this.currentStep);
     }
   }
 

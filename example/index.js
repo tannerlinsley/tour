@@ -5,6 +5,7 @@ var myTour = window.myTour = {
   steps: [{
     target: '#features',
     data: {
+      title: "Wow",
       content: "Let's take a look at some features!"
     }
   }, {
@@ -45,7 +46,7 @@ var myTour = window.myTour = {
     data: { content: "Built in hooks let you fine-tune and control your app state as the tour progresses!"}
   }, {
     target: '#forkme_banner',
-    data: { content: "I'll let you take it from here. <h4 style='text-align:right'><strong><3 <a href='http://github.com/tourjs'>tourjs</a></h4> "}
+    data: { content: "I'll let you take it from here"}
   }]
 }
 
@@ -62,3 +63,8 @@ if (module.hot) {
     tour.start();
   });
 }
+
+
+//todo: add scrolling
+//todo: add currentStep and length param to template function
+  //todo: hid actions when length === 1

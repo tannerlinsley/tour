@@ -1,12 +1,15 @@
 
 import {html} from 'lit-html/lib/lit-extended';
 
-export const DEFAULT_TEMPLATE = (data, eventHandlers, orientation) => html`
+export const DEFAULT_TEMPLATE = (data, eventHandlers, progress) => html`
   <div style="${boxCSS}">
     <span style=${closeButtonCSS}" on-click=${eventHandlers.close}>x</span>
     <h3 style="font-weight:bold">${data.title}</h3>
     <div>${data.content}</div>
-    <div class="controls" style="overflow: hidden; padding: 10px;">
+    <div class="controls" style="overflow: hidden; padding: 10px; display:${progress.total === 1 ? 'none' : 'block'}">
+      <span class="progress" style="float: left">
+       <div> ${progress.current}/${progress.total} </div>
+      </span>
       <span class="actions" style="float: right">
         <button on-click=${eventHandlers.previous}>Previous</button>
         <button on-click=${eventHandlers.next}>Next</button>
