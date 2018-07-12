@@ -17,7 +17,7 @@ export default class Tour {
 
     window.addEventListener('resize', () => {
       // Reinitialize the mask canvas
-      this.mask.resizeCanvasToFillBody();
+      this.mask.setCanvasPosition();
       // Re-render the current step
       this.renderStep(this.currentStep)
     })

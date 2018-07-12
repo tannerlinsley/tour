@@ -1,4 +1,4 @@
-import Tour from '../src/tour.js'
+import Tour from '../src'
 import {html} from 'lit-html/lib/lit-extended';
 
 var myTour = window.myTour = {
