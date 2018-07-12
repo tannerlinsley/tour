@@ -3,8 +3,6 @@ import {createElement, setCanvasDimensions} from './utils/dom'
 export default class Mask {
   MASK_CSS = `
     position: absolute;
-    top: 0px;
-    left: 0px;
     z-index: 99999999999999;
   `;
 
@@ -35,14 +33,15 @@ export default class Mask {
   initCanvas() {
     // Create a canvas spanning the whole body
     this.canvas = createElement('canvas', this.MASK_CSS);
-    this.resizeCanvasToFillBody();
-    
+    this.setCanvasPosition();
     // Get the context
     this.ctx = this.canvas.getContext("2d");
   }
 
-  resizeCanvasToFillBody(){
+  setCanvasPosition(){
     let bodyRect = document.body.getBoundingClientRect();
+    this.canvas.style.top = `${bodyRect.top}px`;
+    this.canvas.style.left = `${bodyRect.left}px`;
     setCanvasDimensions(this.canvas, bodyRect.width, bodyRect.height)
   }
 

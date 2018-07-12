@@ -41,11 +41,10 @@ export default class TourBox {
   goToElement(target, orientation='bottom') {
     let targetRect = target.getBoundingClientRect();
     let wrapperRect = this.wrapper.getBoundingClientRect();
-    let bodyRect = document.body.getBoundingClientRect();
 
     // Compute base positions (the absolute x and y of the upper left corner)
-    let baseX = targetRect.x - bodyRect.x;
-    let baseY = targetRect.y - bodyRect.y;
+    let baseX = targetRect.x + window.scrollX;
+    let baseY = targetRect.y + window.scrollY;
 
     // Calculate the shift (how much to move relative to the base position based) based on the orientation
     let {horizontalShift, verticalShift} = this.calculateRelativeShift(orientation, targetRect, wrapperRect)
