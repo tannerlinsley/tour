@@ -67,7 +67,8 @@ export default class Tour {
   }
 
   nextStep() {
-    if (++this.currentStep < this.steps.length) {
+    if (this.currentStep < this.steps.length - 1) {
+      this.currentStep++;
       this.renderStep(this.currentStep);
     } else {
       this.done();
@@ -75,7 +76,8 @@ export default class Tour {
   }
 
   previousStep() {
-    if (--this.currentStep > -1) {
+    if (this.currentStep > 0) {
+      this.currentStep--;
       this.renderStep(this.currentStep);
     }
   }
