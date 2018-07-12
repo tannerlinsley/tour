@@ -51,10 +51,6 @@ var myTour = window.myTour = {
   }]
 }
 
-const config = {
-  customTemplate: () => html`hi`
-}
-
 let tour = new Tour(myTour.steps, config)
 console.log({tour})
 tour.start();
