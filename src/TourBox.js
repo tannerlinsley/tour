@@ -1,5 +1,5 @@
-import { createElement } from './utils/dom';
-import { horizontalCenter, verticalCenter } from './utils/orientation';
+import { createElement, isFixedPosition } from './utils/dom';
+import { horizontalCenter, verticalCenter} from './utils/orientation';
 import {render} from 'lit-html/lib/lit-extended';
 import {DEFAULT_TEMPLATE, DEFAULT_WRAPPER_CSS} from './defaults'
 
@@ -59,6 +59,11 @@ export default class TourBox {
     let newWrapperRect = this.wrapper.getBoundingClientRect()
     if(wrapperRect.width !==  newWrapperRect.width || wrapperRect.height !== newWrapperRect.height){
       this.goToElement(target, orientation)
+    }
+
+    // Handle case where target is fixed position
+    if(isFixedPosition(target)){
+      window.requestAnimationFrame(()=>this.goToElement(target, orientation))
     }
   }
 

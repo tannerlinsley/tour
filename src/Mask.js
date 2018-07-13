@@ -1,4 +1,4 @@
-import {createElement, setCanvasDimensions} from './utils/dom'
+import {createElement, setCanvasDimensions, isFixedPosition} from './utils/dom'
 
 export default class Mask {
   MASK_CSS = `
@@ -23,6 +23,11 @@ export default class Mask {
       width: targetRect.width,
       height: targetRect.height
     })
+
+    // Handle case where target is fixed position
+    if(isFixedPosition(target)){
+      window.requestAnimationFrame(()=>this.mask(target))
+    }
   }
 
 
