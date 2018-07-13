@@ -4,6 +4,7 @@ export default class Mask {
   MASK_CSS = `
     position: absolute;
     z-index: 99999999999999;
+    pointer-events: none;
   `;
 
   constructor({alpha}) {
