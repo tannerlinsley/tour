@@ -11,7 +11,7 @@
   ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "watch:example": "parcel serve example/index.html --no-hmr",
+    "watch:example": "parcel serve example/index.html",
     "build:example": "parcel build example/index.html",
     "build:lib": "babel src -d lib",
     "clean": "rm -r dist && mkdir dist",

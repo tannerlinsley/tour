@@ -57,15 +57,11 @@ tour.start();
 
 if (module.hot) {
   module.hot.dispose(function () {
-    tour.done()
+    location.reload();
+    // tour.done()
   });
 
   module.hot.accept(function () {
-    tour.start();
+    // tour.start();
   });
 }
-
-
-//todo: add scrolling
-//todo: add currentStep and length param to template function
-  //todo: hid actions when length === 1
