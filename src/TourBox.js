@@ -1,4 +1,4 @@
-import { createElement, isFixedPosition } from './utils/dom';
+import { createElement, isFixedPosition, getAbsoluteBoundingRect} from './utils/dom';
 import { horizontalCenter, verticalCenter} from './utils/orientation';
 import {render} from 'lit-html/lib/lit-extended';
 import {DEFAULT_TEMPLATE, DEFAULT_WRAPPER_CSS} from './defaults'
@@ -39,12 +39,12 @@ export default class TourBox {
   }
 
   goToElement(target, orientation='bottom') {
-    let targetRect = target.getBoundingClientRect();
+    let targetRect = getAbsoluteBoundingRect(target);
     let wrapperRect = this.wrapper.getBoundingClientRect();
 
     // Compute base positions (the absolute x and y of the upper left corner)
-    let baseX = targetRect.x + window.scrollX;
-    let baseY = targetRect.y + window.scrollY;
+    let baseX = targetRect.left;
+    let baseY = targetRect.top;
 
     // Calculate the shift (how much to move relative to the base position based) based on the orientation
     let {horizontalShift, verticalShift} = this.calculateRelativeShift(orientation, targetRect, wrapperRect)

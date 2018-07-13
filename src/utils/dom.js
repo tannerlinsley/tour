@@ -63,3 +63,22 @@ function getAllParentNodes(el){
   }
   return result;
 }
+
+
+export function getAbsoluteBoundingRect(el) {
+  let rect = el.getBoundingClientRect();
+
+  let result = {
+    top: rect.top + window.pageYOffset,
+    bottom: rect.bottom + window.pageYOffset,
+    left: rect.left + window.pageXOffset,
+    right: rect.right + window.pageXOffset,
+    width: rect.width,
+    height: rect.height
+  }
+
+  result.x = result.left;
+  result.y = result.top;
+
+  return result;
+}
