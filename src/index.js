@@ -1,6 +1,7 @@
-import Mask from "./Mask";
-import TourBox from "./TourBox";
-import {elementIsVisible} from './utils/dom'
+import Mask from "./components/Mask";
+import TourBox from "./components/TourBox";
+import {scrollIntoViewIfNecessary} from './utils/dom'
+import Renderer from "./renderer/Renderer";
 
 export default class Tour {
   constructor(steps = [], config = {}) {
@@ -15,12 +16,7 @@ export default class Tour {
     this.tourBox = new TourBox(this, config.customTemplate || null, config.customWrapperCSS || null);
     this.currentStep = 0;
 
-    window.addEventListener('resize', () => {
-      // Reinitialize the mask canvas
-      this.mask.setCanvasPosition();
-      // Re-render the current step
-      this.renderStep(this.currentStep)
-    })
+    this.renderer = new Renderer(this.tourBox, this.mask);
   }
 
   renderStep(stepIndex) {
@@ -35,19 +31,12 @@ export default class Tour {
     let progress = {current: stepIndex + 1, total: this.steps.length}
 
     // Display the step
-    this.tourBox.render(step.data, progress);
-    this.tourBox.goToElement(step.target);
-    this.mask.mask(step.target);
+    this.tourBox.renderData(step.data, progress);
+    this.renderer.renderStep(step)
 
-
-    // Scroll the target into view if necessary
-    if(!elementIsVisible(step.target)){
-      step.target.scrollIntoView({behavior: 'smooth'})
-    }
-    // Scroll the tour into view if necessary
-    if(!elementIsVisible(this.tourBox.wrapper)){
-      this.tourBox.wrapper.scrollIntoView({behavior: 'smooth'})
-    }
+    // Make sure everything is scrolled into view (First the target. Then, if nescessary, the tourBox)
+    scrollIntoViewIfNecessary(step.target);
+    scrollIntoViewIfNecessary(this.tourBox.wrapper)
 
     // Run the after hook
     if(step.after){
@@ -55,7 +44,7 @@ export default class Tour {
     }
   }
 
-  start() {
+  start() {    
     // Display the first step
     this.renderStep(0);
 
@@ -85,6 +74,7 @@ export default class Tour {
   cleanup() {
     this.tourBox.cleanup();
     this.mask.cleanup();
+    this.renderer.cleanup();
   }
 
   done() {

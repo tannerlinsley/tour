@@ -1,7 +1,7 @@
-import { createElement, isFixedPosition, getAbsoluteBoundingRect} from './utils/dom';
-import { horizontalCenter, verticalCenter} from './utils/orientation';
+import { createElement, isFixedPosition, getAbsoluteBoundingRect} from '../utils/dom';
+import { horizontalCenter, verticalCenter} from '../utils/orientation';
 import {render} from 'lit-html/lib/lit-extended';
-import {DEFAULT_TEMPLATE, DEFAULT_WRAPPER_CSS} from './defaults'
+import {DEFAULT_TEMPLATE, DEFAULT_WRAPPER_CSS} from '../defaults'
 
 
 export default class TourBox {
@@ -25,7 +25,7 @@ export default class TourBox {
     this.wrapper = createElement('div', this.wrapperCSS);
   }
 
-  render(data, progress) {
+  renderData(data, progress) {
     render(this.template(data, this.eventHandlers, progress), this.wrapper);
   }
 
@@ -36,35 +36,6 @@ export default class TourBox {
   goToPosition(x, y) {
     this.wrapper.style.left = `${x}px`;
     this.wrapper.style.top = `${y}px`;
-  }
-
-  goToElement(target, orientation='bottom') {
-    let targetRect = getAbsoluteBoundingRect(target);
-    let wrapperRect = this.wrapper.getBoundingClientRect();
-
-    // Compute base positions (the absolute x and y of the upper left corner)
-    let baseX = targetRect.left;
-    let baseY = targetRect.top;
-
-    // Calculate the shift (how much to move relative to the base position based) based on the orientation
-    let {horizontalShift, verticalShift} = this.calculateRelativeShift(orientation, targetRect, wrapperRect)
-
-    // Go to the computed position
-    let newX = baseX + horizontalShift;
-    let newY =  baseY + verticalShift
-    this.goToPosition(newX, newY);
-
-    // Check that the width/height didn't change in the process (if they did we need to rerun again since centering will be thrown off)
-    // Explanation: Sometimes the browser will rerender the div when you move it to help fit its contents in the viewport (ie if you try to smush the tour div onto the right side of the screen partially, it'll resize to fit)
-    let newWrapperRect = this.wrapper.getBoundingClientRect()
-    if(wrapperRect.width !==  newWrapperRect.width || wrapperRect.height !== newWrapperRect.height){
-      this.goToElement(target, orientation)
-    }
-
-    // Handle case where target is fixed position
-    if(isFixedPosition(target)){
-      window.requestAnimationFrame(()=>this.goToElement(target, orientation))
-    }
   }
 
   calculateRelativeShift(orientation, targetRect, wrapperRect){

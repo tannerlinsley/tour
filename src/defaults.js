@@ -29,6 +29,7 @@ const boxCSS = `
   padding: 15px;
   box-shadow: 0px 0px 9px #636363;
   max-width:300px;
+  min-width: 200px;
 `;
 
 const closeButtonCSS = `

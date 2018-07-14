@@ -1,37 +1,25 @@
-import {createElement, setCanvasDimensions, isFixedPosition, getAbsoluteBoundingRect} from './utils/dom'
+import {createElement, setCanvasDimensions, isFixedPosition, getAbsoluteBoundingRect} from '../utils/dom'
 
 export default class Mask {
   MASK_CSS = `
     position: absolute;
     z-index: 99999999999999;
     pointer-events: none;
-    top: 0px;
-    left: 0px;
   `;
 
-  constructor({alpha}) {
+  constructor({alpha, customCSS}) {
+    //Initialize properties
     this.alpha = alpha;
+
+    // Handle custom mask css
+    if(customCSS){
+      // Append it to the end of MASK_CSS (last css overides)
+      this.MASK_CSS += customCSS
+    }
+    
+    // Initialize the canvas
     this.initCanvas();
   }
-
-  mask(target){
-    let targetRect = getAbsoluteBoundingRect(target)
-
-    this.refill();
-
-    this.createHoleAtPosition({
-      x: targetRect.left,
-      y: targetRect.top,
-      width: targetRect.width,
-      height: targetRect.height
-    })
-
-    // Handle case where target is fixed position
-    if(isFixedPosition(target)){
-      window.requestAnimationFrame(()=>this.mask(target))
-    }
-  }
-
 
   cleanup(){
     this.clearFill()
@@ -40,14 +28,17 @@ export default class Mask {
   initCanvas() {
     // Create a canvas spanning the whole body
     this.canvas = createElement('canvas', this.MASK_CSS);
-    this.setCanvasPosition();
     // Get the context
     this.ctx = this.canvas.getContext("2d");
   }
 
-  setCanvasPosition(){
-    let bodyRect = document.body.getBoundingClientRect();
-    setCanvasDimensions(this.canvas, bodyRect.width, bodyRect.height)
+  setCanvasPosition(x, y, width, height){
+    // Set the x, y position
+    this.canvas.style.top = `${y}px`;
+    this.canvas.style.left = `${x}px`
+
+    // Set the width, height dimensions
+    setCanvasDimensions(this.canvas, width, height)
   }
 
   refill(){
