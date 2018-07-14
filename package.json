@@ -28,7 +28,10 @@
   },
   "homepage": "https://github.com/tourjs/tour",
   "dependencies": {
-    "lit-html": "^0.10.2"
+    "es6-event-emitter": "^1.10.2",
+    "event-emitter-es6": "^1.1.5",
+    "lit-html": "^0.10.2",
+    "shallow-equal": "^1.0.0"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
