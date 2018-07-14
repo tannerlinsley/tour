@@ -57,11 +57,10 @@ tour.start();
 
 if (module.hot) {
   module.hot.dispose(function () {
-    location.reload();
-    // tour.done()
+    tour.done()
   });
 
   module.hot.accept(function () {
-    // tour.start();
+    tour.start();
   });
 }
