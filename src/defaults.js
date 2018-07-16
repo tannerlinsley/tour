@@ -1,4 +1,4 @@
-import tourBoxTemplate from './tourBoxTemplate'
+import tourBoxTemplate from './tourBoxTemplate';
 
 export const DEFAULT_TEMPLATE = (data, eventHandlers, progress) => tourBoxTemplate`
   <div style="${boxCSS}">
@@ -40,6 +40,7 @@ const closeButtonCSS = `
   color: #aaa;
 `
 
+/*
 let arrowCSS = orientation => {
   const COLOR = 'grey'
 
@@ -80,4 +81,4 @@ let arrowCSS = orientation => {
             border-right:10px solid ${COLOR}; 
           `;
   }
-};
+};*/

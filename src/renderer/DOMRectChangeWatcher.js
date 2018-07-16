@@ -1,6 +1,6 @@
-import { getAbsoluteBoundingRect } from '../utils/dom';
-import objectsShallowEqual from 'shallow-equal/objects';
 import EventEmitter from 'es6-event-emitter';
+import objectsShallowEqual from 'shallow-equal/objects';
+import { getAbsoluteBoundingRect } from '../utils/dom';
 
 
 export default class DOMRectChangeWatcher extends EventEmitter {

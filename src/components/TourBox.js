@@ -1,7 +1,7 @@
-import { createElement, isFixedPosition, getAbsoluteBoundingRect} from '../utils/dom';
-import { horizontalCenter, verticalCenter} from '../utils/orientation';
-import {render} from 'lit-html/lib/lit-extended';
-import {DEFAULT_TEMPLATE, DEFAULT_WRAPPER_CSS} from '../defaults'
+import { render } from 'lit-html/lib/lit-extended';
+import { DEFAULT_TEMPLATE, DEFAULT_WRAPPER_CSS } from '../defaults';
+import { createElement } from '../utils/dom';
+import { horizontalCenter, verticalCenter } from '../utils/orientation';
 
 
 export default class TourBox {

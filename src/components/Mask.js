@@ -1,4 +1,4 @@
-import {createElement, setCanvasDimensions, isFixedPosition, getAbsoluteBoundingRect} from '../utils/dom'
+import { createElement, setCanvasDimensions } from '../utils/dom';
 
 export default class Mask {
   MASK_CSS = `

@@ -47,7 +47,6 @@ export function scrollIntoViewIfNecessary(el){
  * @param {HTMLElement} el 
  */
 function elementIsVisible(el){
-  console.log('el',el)
   let rect = el.getBoundingClientRect();
   let elIsAboveViewport =  rect.bottom < 0
   let elIsBelowViewport = rect.top > window.innerHeight;

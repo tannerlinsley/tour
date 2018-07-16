@@ -1,5 +1,5 @@
-import DOMRectChangeWatcher from './DOMRectChangeWatcher';
 import 'babel-polyfill';
+import DOMRectChangeWatcher from './DOMRectChangeWatcher';
 
 export default class Renderer {
   constructor(tourBox, mask) {

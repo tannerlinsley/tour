@@ -1,22 +1,28 @@
 import Mask from "./components/Mask";
 import TourBox from "./components/TourBox";
-import {scrollIntoViewIfNecessary} from './utils/dom'
 import Renderer from "./renderer/Renderer";
+import { scrollIntoViewIfNecessary } from './utils/dom';
 
 export default class Tour {
   constructor(steps = [], config = {}) {
-    this.steps = steps;
+    // Get the config
+    let {
+      customTemplate,
+      customTourBoxWrapperCSS,
+      alpha
+    } = config;
     
+    // If the user provides a query string instead of an element target, resolve the element here
+    this.steps = steps;
     this.steps.forEach(step => {
       step.target = typeof step.target === 'string' ? document.querySelector(step.target) : step.target
     });
     
-    this.config = config;
-    this.mask = new Mask({ alpha: 0.5 });
-    this.tourBox = new TourBox(this, config.customTemplate || null, config.customWrapperCSS || null);
-    this.currentStep = 0;
-
+    // Initialize stuff
+    this.mask = new Mask({ alpha: alpha || 0.5 });
+    this.tourBox = new TourBox(this, customTemplate || null, customTourBoxWrapperCSS || null);
     this.renderer = new Renderer(this.tourBox, this.mask);
+    this.currentStep = 0;
   }
 
   renderStep(stepIndex) {
