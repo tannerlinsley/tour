@@ -1,7 +1,6 @@
+import tourBoxTemplate from './tourBoxTemplate'
 
-import {html} from 'lit-html/lib/lit-extended';
-
-export const DEFAULT_TEMPLATE = (data, eventHandlers, progress) => html`
+export const DEFAULT_TEMPLATE = (data, eventHandlers, progress) => tourBoxTemplate`
   <div style="${boxCSS}">
     <span style=${closeButtonCSS}" on-click=${eventHandlers.close}>x</span>
     <h3 style="font-weight:bold">${data.title}</h3>

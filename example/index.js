@@ -1,5 +1,5 @@
 import Tour from '../src'
-import {html} from 'lit-html/lib/lit-extended';
+import tourBoxTemplate from '../src/tourBoxTemplate'
 
 var myTour = window.myTour = {
   canExit: true,
@@ -50,6 +50,38 @@ var myTour = window.myTour = {
     data: { content: "I'll let you take it from here"}
   }]
 }
+
+let template = (data, eventHandlers, progress) => tourBoxTemplate`
+  <div style="
+    background-color: lightgreen;
+    padding: 15px;
+    border: 5px dashed red;
+  ">
+    ${
+      data.title ? 
+        tourBoxTemplate`
+          <h1>${data.title}</h1>
+        ` : 
+        'No title :('
+    }
+    <div>
+      ${data.content}
+    </div>
+    <div>
+      <a href="javascript: void null;" onclick="${eventHandlers.next}">
+        Click me to go to the next tour step
+      </a>
+    </div>
+    <div>
+      Currently on step ${progress.current}, we have ${progress.total - progress.current} steps to go!
+    </div>
+  </div>
+`
+
+let config = {
+  customTemplate: template
+}
+
 
 let tour = new Tour(myTour.steps, config)
 console.log({tour})
