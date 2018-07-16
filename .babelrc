@@ -1,0 +1,3 @@
+{
+  "plugins": ["transform-class-properties", "transform-es2015-template-literals"]
+}

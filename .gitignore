@@ -1,5 +1,7 @@
 node_modules
-
-dist/
-
+.cache
+dist
 npm-debug.log
+.idea
+lib
+.DS_STORE
