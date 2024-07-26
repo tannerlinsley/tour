@@ -1,8 +1,8 @@
 {
-  "name": "tour",
-  "version": "3.0.0",
-  "description": "A simple, minimalist touring and on-boarding library for javascript",
-  "main": "dist/tour.js",
+  "name": "@alexdev404/svelte-guide",
+  "version": "0.0.1",
+  "description": "A simple, minimalist touring and on-boarding library for svelte. Based upon tourjs/tour by Tanner Linsley and David Nagli.",
+  "main": "src/index.ts",
   "files": [
     "example",
     "dist",
@@ -11,31 +11,26 @@
   ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "watch:example": "parcel serve example/index.html",
-    "build:example": "parcel build example/index.html",
-    "build:lib": "babel src -d lib",
-    "clean": "rm -r dist && mkdir dist",
-    "prepublish": "npm run build:lib && npm run build:example"
+    "clean": "rm -rf dist lib .parcel-cache && mkdir dist",
+    "publish-pkg": "npm publish --access public"
   },
   "repository": {
     "type": "git",
-    "url": "http://github.com/tourjs/tour.git"
+    "url": "git+ssh://git@github.com/alexdev404/svelte-guide.git"
   },
-  "author": "Tanner Linsley <tannerlinsley@gmail.com> and David Nagli <davidnagli@gmail.com>",
+  "author": "Immanuel Garcia <alexdev404@proton.me>, Tanner Linsley <tannerlinsley@gmail.com> and David Nagli <davidnagli@gmail.com>",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/tourjs/tour/issues"
   },
-  "homepage": "https://github.com/tourjs/tour",
+  "homepage": "https://github.com/alexdev404/svelte-guide",
   "dependencies": {
-    "es6-event-emitter": "^1.10.2",
     "event-emitter-es6": "^1.1.5",
-    "lit-html": "^0.10.2",
-    "shallow-equal": "^1.0.0"
+    "shallow-equal": "^3.1.0"
   },
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-plugin-transform-class-properties": "^6.24.1",
-    "parcel": "^1.9.4"
+    "@types/event-emitter-es6": "^1.1.4",
+    "svelte": ">4.2.17",
+    "typescript": ">5.4.5"
   }
 }

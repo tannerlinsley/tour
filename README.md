@@ -10,39 +10,41 @@ A simple, minimalist touring and on-boarding library for javascript
 
 ## Features
 
-* Supports single page apps, and complex scrollable content
-*	Responsive & Intelligent
-*	Automagic Positioning
-*	Promise Driven Events & Hooks
-*	Tour does not manipulate or relayer your DOM elements in any way
+- Supports single page apps, and complex scrollable content
+- Responsive & Intelligent
+- Automagic Positioning
+- Promise Driven Events & Hooks
+- Tour does not manipulate or relayer your DOM elements in any way
 
 ## Installation
 
 Install via npm
+
 ```bash
 $ npm install tour --save
 ```
+
 or CDN
 
 https://npmcdn.com/tour@latest/dist/tour.js
 https://npmcdn.com/tour@latest/dist/tour.css
 
 Import JS and CSS
+
 ```javascript
 // ES6+
-import Tour from 'tour'
+import Tour from "tour";
 
 // CommonJS
-const Tour = require('tour').default
+const Tour = require("tour").default;
 
 // Vanilla
-var Tour = window.Tour.default
+var Tour = window.Tour.default;
 ```
+
 ```css
-@import 'node_modules/tour/dist/tour.css'
+@import "node_modules/tour/dist/tour.css";
 ```
-
-
 
 ## Simple Usage
 
@@ -52,17 +54,26 @@ const myTour = {
 	nextText: 'Proceed!',
 	steps: [{
 		target: '#first-element',
+		data: {
+        title: "Wow",
 		content: 'This is the first step!',
+		}
 	}, {
 		target: '.some .other .element',
+		data: {
 		content: 'Blah blah blah. I prefer to show up on the right.',
+		}
 		placement: [ 'right', 'top', 'bottom', 'left' ],
 	}, {
 		target: '#menu-element',
+		data: {
 		content: 'I guess this is a menu!',
+		}
 	}, {
 		target: '#last-element',
+		data: {
 		content: 'It is over! :(',
+		}
 	}],
 };
 
@@ -79,8 +90,10 @@ Tour.start(myTour)
 ## Config
 
 Defaults:
+
 ```javascript
 {
+	customTemplate: (data, eventHandlers, progress) => ... // Custom template for the tourbox
 	canExit: false, // Can exit the tour or not (via an X button)
 	padding: 5, // Padding around the highlighted element
 	maxHeight: 120, // Max height of the tooltip box
@@ -107,65 +120,84 @@ Defaults:
 ## API
 
 #### .start(tour)
+
 - Starts a Tour
 - Params:
-  *	*tour*: Tour Object
+  - _tour_: Tour Object
 - Returns:
-  *	Promise that resolves when the tour is finished or rejected when aborted.
+  - Promise that resolves when the tour is finished or rejected when aborted.
 
 #### .stop()
+
 - Stops a Tour
 - Returns:
-  *	Promise that resolves when the tour is stopped.
+  - Promise that resolves when the tour is stopped.
 
 #### .next()
+
 - Goes to the next step in the current tour
 - Returns:
-  *	Promise that resolves when the next step is reached
+  - Promise that resolves when the next step is reached
 
 #### .previous()
+
 - Goes to the previous step in the current tour
-  *	Promise that resolves when the previous step is reached
+  - Promise that resolves when the previous step is reached
 
 #### .goto(index)
+
 - Goes to a specific step in the tour
 - Params:
-  *	*index*: The 0-index number of the step eg. `0, 1, 2, 3`
+
+  - _index_: The 0-index number of the step eg. `0, 1, 2, 3`
 
 - Returns:
-  *	Promise that resolves when the specific step is reached
-
+  - Promise that resolves when the specific step is reached
 
 ## Using Promise Event Hooks
-You can pass any function that returns a promise to the `before` and `after` properties for any step.  When the promise resolves, the tour moves on accordingly.
+
+You can pass any function that returns a promise to the `before` and `after` properties for any step. When the promise resolves, the tour moves on accordingly.
 
 #### Example
+
 ```javascript
 var tour = {
-	steps: [{
-      target: '#first-element',
-      content: 'This is the first step!',
-    }, {
-      target: '.some .other .element',
-      content: 'Blah blah blah.',
-      before: () => {
-      	// Do something amazing
-      	return new Promise()
-    	}
-    }, {
-      target: '#menu-element',
-      content: 'I guess this is a menu!',
-      after: () => {
-      	// Do some more cool stuff
-      	return new Promise()
-    	}
-    }, {
-      target: '#last-element',
-      content: 'It is over! :(',
-    }]
-}
+  steps: [
+    {
+      target: "#first-element",
+      data: {
+        content: "This is the first step!",
+      },
+    },
+    {
+      target: ".some .other .element",
+      data: {
+        content: "Blah blah blah.",
+        before: () => {
+          // Do something amazing
+          return new Promise();
+        },
+      },
+    },
+    {
+      target: "#menu-element",
+      data: {
+        content: "I guess this is a menu!",
+        after: () => {
+          // Do some more cool stuff
+          return new Promise();
+        },
+      },
+    },
+    {
+      target: "#last-element",
+      data: {
+        content: "It is over! :(",
+      },
+    },
+  ],
+};
 ```
-
 
 ## Roadmap & Contributing
 
